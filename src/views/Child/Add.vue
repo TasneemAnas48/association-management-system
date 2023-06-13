@@ -25,17 +25,15 @@
                         <h6 class="box-title">معلومات عامة عن الطفل</h6>
                         <div v-for="(ques, index) in personal_ques" :key="index">
                             <v-text-field
-                                v-if="ques.type == 0 && ques.ques_id != 1 && ques.ques_id != 4 && ques.ques_id != 3 && ques.ques_id != 10 && ques.ques_id != 7 && ques.ques_id != 5"
+                                v-if="ques.type == 0 && ques.ques_id != 1 && ques.ques_id != 4 && ques.ques_id != 3 && ques.ques_id != 11 && ques.ques_id != 8 && ques.ques_id != 6"
                                 outlined :reverse="true" v-model="my_answer[index].answer"
                                 :label="ques.question"></v-text-field>
                             <v-text-field v-if="ques.ques_id == 1" outlined :reverse="true" v-model="name"
                                 :label="ques.question"></v-text-field>
-                            <v-text-field v-if="ques.ques_id == 7" outlined :reverse="true" v-model="phone_number"
+                            <v-text-field v-if="ques.ques_id == 8" outlined :reverse="true" v-model="phone_number"
                                 :label="ques.question"></v-text-field>
-                            <!-- <v-text-field v-if="ques.ques_id == 5" outlined :reverse="true" v-model="gender"
-                                :label="ques.question"></v-text-field> -->
 
-                            <div class="row" style="margin-right: 5px" v-if="ques.ques_id == 5">
+                            <div class="row" style="margin-right: 5px" v-if="ques.ques_id == 6">
                                 <p style="font-size: 18px;">{{ ques.question }}</p>
                                 <v-radio-group v-model="gender" row>
                                     <v-radio label="انثى" value="انثى"></v-radio>
@@ -47,7 +45,7 @@
                                 @date="my_answer[index].answer = $event"></my-date>
                             <my-date v-if="ques.ques_id == 4" :ques="ques.question" @date="age = $event"
                                 :date="my_answer[index].answer"></my-date>
-                            <my-date v-if="ques.ques_id == 10" :ques="ques.question" :date="my_answer[index].answer"
+                            <my-date v-if="ques.ques_id == 11" :ques="ques.question" :date="my_answer[index].answer"
                                 @date="my_answer[index].answer = $event"></my-date>
                             <div class="row" style="margin-right: 5px" v-if="ques.type == 1">
                                 <p style="font-size: 18px;">{{ ques.question }}</p>
@@ -66,9 +64,9 @@
                     <div class="box">
                         <h6 class="box-title">معلومات عامة عن العائلة</h6>
                         <div v-for="(ques, index) in family_ques" :key="index">
-                            <v-text-field v-if="ques.type == 0 && ques.ques_id != 31" outlined :reverse="true" required
+                            <v-text-field v-if="ques.type == 0 && ques.ques_id != 32" outlined :reverse="true" required
                                 v-model="my_answer[personal_length + index].answer" :label="ques.question"></v-text-field>
-                            <sister-table v-if="ques.ques_id == 31" :title="ques.question" @table="sister_info = $event" />
+                            <sister-table v-if="ques.ques_id == 32" :title="ques.question" @table="sister_info = $event" />
                             <div class="row" style="margin-right: 5px" v-if="ques.type == 1">
                                 <p style="font-size: 18px;">{{ ques.question }}</p>
                                 <v-radio-group v-model="my_answer[personal_length + index].answer" row>
@@ -224,7 +222,7 @@ export default {
                 if (this.$route.name == "add-child") {
                     this.my_answer.forEach(item => {
 
-                        if (item.ques_id != 1 && item.ques_id != 7 && item.answer != '') {
+                        if (item.ques_id != 1 && item.ques_id != 8 && item.answer != '') {
                             this.send_answer.push(item)
                         }
                         if (item.ques_id == 4)
@@ -232,9 +230,9 @@ export default {
                                 ques_id: 4,
                                 answer: this.age,
                             });
-                        if (item.ques_id == 5)
+                        if (item.ques_id == 6)
                             this.send_answer.push({
-                                ques_id: 5,
+                                ques_id: 6,
                                 answer: this.gender,
                             });
                     })
@@ -288,7 +286,7 @@ export default {
                         this.phone_number = res.data.data[0].phone
                         this.age = res.data.data[0].birth_date
                         res.data.data[0].personal_info.forEach(item => {
-                            if (item.ques_id == 5)
+                            if (item.ques_id == 6)
                                 this.gender = item.answer
                             this.my_answer.forEach(itemm => {
 
@@ -298,7 +296,7 @@ export default {
                                     itemm.answer = this.age
                                 // if (itemm.ques_id == 1)
                                 //     itemm.answer = this.name
-                                // if (itemm.ques_id == 7)
+                                // if (itemm.ques_id == 8)
                                 //     itemm.answer = this.phone_number
                             })
                         })
@@ -311,7 +309,7 @@ export default {
         },
         editData() {
             this.my_answer.forEach(item => {
-                if (item.ques_id != 1 && item.ques_id != 7) {
+                if (item.ques_id != 1 && item.ques_id != 8) {
                     this.send_answer.push(item)
                 }
                 if (item.ques_id == 4)
@@ -319,9 +317,9 @@ export default {
                         ques_id: 4,
                         answer: this.age,
                     });
-                if (item.ques_id == 5)
+                if (item.ques_id == 6)
                     this.send_answer.push({
-                        ques_id: 5,
+                        ques_id: 6,
                         answer: this.gender,
                     });
             })
