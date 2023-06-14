@@ -155,7 +155,7 @@ export default {
                     console.log(this.data)
                     this.getGender()
                     this.personal.forEach(item => {
-                        if (item.title == "معلومات عامة عن الطفل" && item.ques_id != 4 && item.ques_id != 5)
+                        if (item.title == "معلومات عامة عن الطفل" && item.ques_id != 4 && item.ques_id != 6)
                             this.personal_answer.push(item);
                         else if (item.title == "معلومات عامة عن العائلة")
                             this.family_answer.push(item);
@@ -165,7 +165,7 @@ export default {
                 });
         },
         getGender() {
-            this.gender = this.personal.filter(item => item.ques_id == 5)
+            this.gender = this.personal.filter(item => item.ques_id == 6)
             this.gender = this.gender[0].answer
             // console.log(this.gender)
         }
