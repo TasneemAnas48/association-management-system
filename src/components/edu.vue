@@ -5,13 +5,13 @@
                 <h6 class="box-title">
                     {{ box.title }}
                 </h6>
-                <div v-for="(item, i) in box.question" :key="i">
+                <div v-for="(item, i) in box.list" :key="i">
                     <v-text-field outlined :reverse="true" v-if="item.type == 0" v-model="answer[item.id - 1].answer"
                         :label="item.question"></v-text-field>
                     <div class="row" style="margin-right: 5px" v-if="item.type == 1">
                         <p style="font-size: 18px;">{{ item.question }}</p>
                         <v-radio-group v-model="answer[item.id - 1].answer" row>
-                            <v-radio :label="ch.choice" :value="ch.choice" v-for="(ch, j) in box.choice" :key="j"></v-radio>
+                            <v-radio :label="ch.choice" :value="ch.choice" v-for="(ch, j) in item.choice" :key="j"></v-radio>
                         </v-radio-group>
                     </div>
                 </div>
@@ -59,13 +59,14 @@ export default {
                 .then(res => {
                     this.load = true
                     this.boxes = res.data
+                    console.log(res.data)
                     this.initAnswer()
                     // console.log(this.boxes[0].question.length)
                 })
         },
         initAnswer() {
             this.boxes.forEach(item => {
-                item.question.forEach(it => {
+                item.list.forEach(it => {
                     this.answer.push({
                         ques_id: it.id,
                         answer: '',
