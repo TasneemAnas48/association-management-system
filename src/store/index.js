@@ -12,6 +12,7 @@ export default new Vuex.Store({
     email:'',
     token:'',
     role:'',
+    data_report: []
   },
   getters: {
   },

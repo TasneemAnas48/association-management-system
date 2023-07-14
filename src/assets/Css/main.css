@@ -93,6 +93,20 @@
     background-color: #f18c2d;
     cursor: pointer;
 }
+.my-table .fa-file-zipper{
+    color: #e220d2;
+    background: #e220d23f;
+    border-radius: 7px;
+    padding: 7px 9px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.my-table .fa-file-zipper:hover{
+    color: white;
+    background-color: #e220d2;
+    cursor: pointer;
+}
 .my-table .v-data-footer{
     direction: ltr;
 }

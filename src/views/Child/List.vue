@@ -49,14 +49,15 @@
                                 </div>
                             </div>
                         </template>
-                        <template v-slot:[`item.infection`]="{ item }">
-                            <div v-if="item.infection == null">
-                                لم تتم دراسة الحالة
-                            </div>
-                        </template>
+                    
                         <template v-slot:[`item.study_status`]="{ item }">
                             <div @click="study_status(item)">
                                 <i class="fas fa-edit"></i>
+                            </div>
+                        </template>
+                        <template v-slot:[`item.report`]="{ item }">
+                            <div @click="report(item)">
+                                <i class="	fas fa-file-archive"></i>
                             </div>
                         </template>
                     </v-data-table>
@@ -82,6 +83,26 @@
                     </template>
                 </v-snackbar>
             </div>
+            <v-dialog v-model="DialogReport" max-width="500px">
+                <v-card>
+                    <v-card-title>إصدار تقرير للطفل</v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text class="justify-content-center" style="padding: 10px 30px">
+                        <v-text-field hide-details outlined :reverse="true" v-model="recomm"
+                            label="التوصيات "></v-text-field>
+                        <v-text-field hide-details outlined :reverse="true" v-model="summary"
+                            label="الخلاصة "></v-text-field>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-btn color="green darken-1" text @click="confrim_report">إرسال
+                        </v-btn>
+                        <v-btn color="gray" text @click="DialogReport = false">إلغاء
+                        </v-btn>
+                    </v-card-actions>
+                    <v-spacer></v-spacer>
+                </v-card>
+            </v-dialog>
         </div>
     </div>
 </template>
@@ -100,10 +121,12 @@ export default {
             { text: 'الاسم', value: 'name', align: "center" },
             { text: 'العمر', value: 'age', align: "center" },
             { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
-            { text: 'الحالة', value: 'infection', align: "center" },
+            // { text: 'الحالة', value: 'infection', align: "center" },
             { text: 'دراسة حالة', value: 'study_status', align: "center" },
             // { text: 'القسم', value: 'section', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
+            { text: 'تقرير', value: 'report', sortable: false, align: "center" },
+
         ],
         search: '',
         data: [],
@@ -125,6 +148,10 @@ export default {
         ],
         snackbar_delete: false,
         error_snackbar_delete: false,
+        DialogReport: false,
+        recomm: null,
+        summary: null,
+        child_id: null
     }),
     watch: {
         dialogDelete(val) {
@@ -163,18 +190,37 @@ export default {
             this.dialogDelete = false
         },
         sendIdDeleted() {
-            this.axios.delete(this.$store.state.url + "/api/child/"+ this.delete.id )
+            this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.id)
                 .then((res) => {
                     console.log(res)
                     console.log(this.delete.id)
-                    if (res.status == 200 )
+                    if (res.status == 200)
                         this.snackbar_delete = true
                     else
                         this.error_snackbar_delete = true
                 })
         },
-        study_status(item){
+        study_status(item) {
             this.$router.replace({ name: 'child-study', params: { id: item.id } })
+        },
+        report(item) {
+            this.DialogReport = true
+            this.child_id = item.id
+        },
+        confrim_report() {
+            // console.log(this.recomm)
+            // console.log(this.summary)
+            // this.axios.post(this.$store.state.url + "/api/Report/" + this.child_id,
+            //     {
+            //         recomm: this.recomm,
+            //         summary: this.summary
+            //     })
+            //     .then(res => {
+            //         console.log(res.data)
+            //         this.$store.state.data_report = res.data
+            //         console.log(this.$store.state.data_report)
+            //     });
+            this.$router.replace({ name: 'report-child', params: { id: this.child_id } })
         }
     },
     mounted() {

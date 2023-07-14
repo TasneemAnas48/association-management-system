@@ -3,19 +3,33 @@
         <div v-if="education == 'done'">
             <div v-for="(box, index) in boxes" :key="index">
                 <div class="box" v-if="box.question.length != 0">
-                    <div class="box-title">
-                        {{ box.title }}
+                    <div v-if="box.title != 'no title'">
+                        <div class="box-title">
+                            {{ box.title }}
+                        </div>
+                        <v-simple-table style="padding: 0px; border: none;margin: 0px; top: -20px; position: relative;">
+                            <template v-slot:default>
+                                <tbody>
+                                    <tr v-for="(item, index) in box.question" :key="index">
+                                        <td class="my-title">{{ item.question }}</td>
+                                        <td>{{ item.answer }}</td>
+                                    </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
                     </div>
-                    <v-simple-table style="padding: 0px; border: none;margin: 0px; top: -20px; position: relative;">
-                        <template v-slot:default>
-                            <tbody>
-                                <tr v-for="(item, index) in box.question" :key="index">
-                                    <td class="my-title">{{ item.question }}</td>
-                                    <td>{{ item.answer }}</td>
-                                </tr>
-                            </tbody>
-                        </template>
-                    </v-simple-table>
+                    <div v-else>
+                        <v-simple-table style="padding: 0px; border: none;margin: 0px; position: relative;">
+                            <template v-slot:default>
+                                <tbody>
+                                    <tr v-for="(item, index) in box.question" :key="index">
+                                        <td class="my-title">{{ item.question }}</td>
+                                        <td>{{ item.answer }}</td>
+                                    </tr>
+                                </tbody>
+                            </template>
+                        </v-simple-table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,7 +65,7 @@ export default {
                 .then(res => {
                     this.load = true
                     this.boxes = res.data
-                    // console.log(res.data)
+                    console.log(res.data)
                     this.boxes.forEach(box => {
                         box.question = box.question.filter(item => item.answer != "null")
                     })
@@ -100,4 +114,5 @@ export default {
 .edu-display .text {
     font-size: 20px;
     font-weight: bold;
-}</style>
+}
+</style>

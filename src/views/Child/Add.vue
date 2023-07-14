@@ -56,10 +56,17 @@
                             </div>
                         </div>
                         <div v-for="(error, i) in Errors" :key="`${i}-${error}`">
-                            <v-snackbar right bottom color="red " text v-model="error_snackbar" timeout="30000">
+                            <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="30000">
                                 {{ error }}
                             </v-snackbar>
                         </div>
+                        <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="30000">
+                            <ul style=" padding: 0px 20px;">
+                                <li v-for="(error, i) in back_error" :key="i">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </v-snackbar>
                     </div>
                     <div class="box">
                         <h6 class="box-title">معلومات عامة عن العائلة</h6>
@@ -169,6 +176,7 @@ export default {
         sister_info: [],
         gender: null,
         id: null,
+        back_error: []
     }),
     validations: {
         name: { required },
@@ -278,7 +286,13 @@ export default {
                 .then(res => {
                     console.log(res)
                     this.response = true
-                    if (res.status == 200) {
+                    if (res.data.message == "error in some information") {
+                        this.back_error = res.data.data
+                        this.error_snackbar = true
+                        this.send_answer = []
+                    }
+
+                    else{
                         this.snackbar = true
                         this.$router.replace({ name: 'child-list' })
                     }

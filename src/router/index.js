@@ -18,6 +18,8 @@ import AppointmentList from "@/views/Appointment/List.vue"
 import Study from "@/views/Study/Study.vue"
 import Parent from "@/views/Parent/Parent.vue"
 import ParentList from "@/views/Parent/List.vue"
+import ReportChild from "@/views/Child/Report.vue"
+import PrintChild from "@/views/Child/Print.vue"
 Vue.use(VueRouter)
 
 const routes = [
@@ -40,6 +42,16 @@ const routes = [
     path: '/child/display/:id',
     name: 'display-child',
     component: DisplayChild
+  },
+  {
+    path: '/child/report/:id',
+    name: 'report-child',
+    component: ReportChild
+  },
+  {
+    path: '/child/print/:id',
+    name: 'print-child',
+    component: PrintChild
   },
   {
     path: '/',

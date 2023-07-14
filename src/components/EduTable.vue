@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-data-table :headers="headers" :items="localSisterInfo" class="sister-table" hide-default-footer>
+        <v-data-table :headers="headers" :items="localCenterInfo" class="sister-table" hide-default-footer>
             <template v-slot:top>
                 <v-toolbar flat>
                     <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -18,28 +18,30 @@
                             <v-divider class="mx-4" inset></v-divider>
                             <v-card-text>
                                 <v-container>
-                                    <v-text-field outlined :reverse="true" v-model="editedItem.name" label="الاسم"
-                                        :error-messages="nameErrors" @input="$v.editedItem.name.$touch()"></v-text-field>
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.center_name"
+                                        label="اسم المركز" :error-messages="nameErrors"
+                                        @input="$v.editedItem.center_name.$touch()"></v-text-field>
 
-                                    <!-- <v-text-field outlined :reverse="true" v-model="editedItem.gender" label="الجنس"
-                                        :error-messages="genderErrors"
-                                        @input="$v.editedItem.gender.$touch()"></v-text-field> -->
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.diagnosis" label="التشخيص"
+                                        :error-messages="diagnosisErrors"
+                                        @input="$v.editedItem.diagnosis.$touch()"></v-text-field>
 
-                                    <v-text-field outlined :reverse="true" v-model="editedItem.age" label="العمر"
-                                        :error-messages="ageErrors" @input="$v.editedItem.age.$touch()"></v-text-field>
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.specialist" label="الاخصائي"
+                                        :error-messages="specialistErrors"
+                                        @input="$v.editedItem.specialist.$touch()"></v-text-field>
 
-                                    <v-text-field outlined :reverse="true" v-model="editedItem.Educ_level"
-                                        label="المستوى التعليمي" :error-messages="Educ_levelErrors"
-                                        @input="$v.editedItem.Educ_level.$touch()"></v-text-field>
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.qualification"
+                                        label="التأهيل" :error-messages="qualificationErrors"
+                                        @input="$v.editedItem.qualification.$touch()"></v-text-field>
 
-                                    <div class="row" style="margin-right: 5px">
-                                        <p style="font-size: 18px;">الجنس</p>
-                                        <v-radio-group v-model="editedItem.gender" row :error-messages="genderErrors"
-                                            @input="$v.editedItem.gender.$touch()">
-                                            <v-radio label="انثى" value="انثى"></v-radio>
-                                            <v-radio label="ذكر" value="ذكر"></v-radio>
-                                        </v-radio-group>
-                                    </div>
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.qualification_axes"
+                                        label="محاور التأهيل" :error-messages="qualification_axesErrors"
+                                        @input="$v.editedItem.qualification_axes.$touch()"></v-text-field>
+
+
+                                    <v-text-field outlined :reverse="true" v-model="editedItem.time" label="المدة الزمنية"
+                                        :error-messages="timeErrors" @input="$v.editedItem.time.$touch()"></v-text-field>
+
                                 </v-container>
                             </v-card-text>
                             <v-card-actions class="sister-card-actions">
@@ -69,9 +71,9 @@
                 <v-icon small class="mr-2" @click="editItem(item)">
                     mdi-pencil
                 </v-icon>
-                <!-- <v-icon small @click="deleteItem(item)">
+                <v-icon small @click="deleteItem(item)">
                     mdi-delete
-                </v-icon> -->
+                </v-icon>
             </template>
             <template v-slot:no-data>
                 لايوجد بيانات
@@ -91,26 +93,32 @@ export default {
         dialog: false,
         dialogDelete: false,
         headers: [
-            { text: 'الاسم', value: 'name', align: "center" },
-            { text: 'الجنس', value: 'gender', align: "center" },
-            { text: 'العمر', value: 'age', align: "center" },
-            { text: 'المستوى التعليمي', value: 'Educ_level', align: "center" },
+            { text: 'اسم المركز', value: 'center_name', align: "center" },
+            { text: 'التشخيص', value: 'diagnosis', align: "center" },
+            { text: 'الاخصائي', value: 'specialist', align: "center" },
+            { text: 'التأهيل', value: 'qualification', align: "center" },
+            { text: 'محاور التأهيل', value: 'qualification_axes', align: "center" },
+            { text: 'المدة الزمنية', value: 'time', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
         ],
         editedIndex: -1,
         editedItem: {
-            name: '',
-            gender: '',
-            age: null,
-            Educ_level: '',
+            center_name: '',
+            diagnosis: '',
+            specialist: '',
+            qualification: '',
+            qualification_axes: '',
+            time: '',
         },
         defaultItem: {
-            name: '',
-            gender: '',
-            age: null,
-            Educ_level: '',
+            center_name: '',
+            diagnosis: '',
+            specialist: '',
+            qualification: '',
+            qualification_axes: '',
+            time: '',
         },
-        localSisterInfo: [],
+        localCenterInfo: [],
         route: ''
     }),
     mixins: [validationMixin],
@@ -120,36 +128,49 @@ export default {
         },
         nameErrors() {
             const errors = []
-            if (!this.$v.editedItem.name.$dirty) return errors
-            !this.$v.editedItem.name.required && errors.push('هذا الحقل مطلوب')
+            if (!this.$v.editedItem.center_name.$dirty) return errors
+            !this.$v.editedItem.center_name.required && errors.push('هذا الحقل مطلوب')
             return errors
         },
-        genderErrors() {
+        diagnosisErrors() {
             const errors = []
-            if (!this.$v.editedItem.gender.$dirty) return errors
-            !this.$v.editedItem.gender.required && errors.push('هذا الحقل مطلوب')
+            if (!this.$v.editedItem.diagnosis.$dirty) return errors
+            !this.$v.editedItem.diagnosis.required && errors.push('هذا الحقل مطلوب')
             return errors
         },
-        ageErrors() {
+        specialistErrors() {
             const errors = []
-            if (!this.$v.editedItem.age.$dirty) return errors
-            !this.$v.editedItem.age.required && errors.push('هذا الحقل مطلوب')
-            !this.$v.editedItem.age.numeric && errors.push('الرجاء ادخال العمر كرقم')
+            if (!this.$v.editedItem.specialist.$dirty) return errors
+            !this.$v.editedItem.specialist.required && errors.push('هذا الحقل مطلوب')
             return errors
         },
-        Educ_levelErrors() {
+        qualificationErrors() {
             const errors = []
-            if (!this.$v.editedItem.Educ_level.$dirty) return errors
-            !this.$v.editedItem.Educ_level.required && errors.push('هذا الحقل مطلوب')
+            if (!this.$v.editedItem.qualification.$dirty) return errors
+            !this.$v.editedItem.qualification.required && errors.push('هذا الحقل مطلوب')
+            return errors
+        },
+        qualification_axesErrors() {
+            const errors = []
+            if (!this.$v.editedItem.qualification_axes.$dirty) return errors
+            !this.$v.editedItem.qualification_axes.required && errors.push('هذا الحقل مطلوب')
+            return errors
+        },
+        timeErrors() {
+            const errors = []
+            if (!this.$v.editedItem.time.$dirty) return errors
+            !this.$v.editedItem.time.required && errors.push('هذا الحقل مطلوب')
             return errors
         },
     },
     validations: {
         editedItem: {
-            name: { required },
-            gender: { required },
-            age: { required, numeric },
-            Educ_level: { required }
+            center_name: { required },
+            diagnosis: { required },
+            specialist: { required },
+            qualification: { required },
+            qualification_axes: { required },
+            time: { required }
         }
     },
     watch: {
@@ -161,32 +182,32 @@ export default {
         },
     },
     mounted() {
-        if (this.$route.name == "edit-child") {
-            this.id = this.$route.params.id
-            if (!this.localDate) {
-                this.axios.get(this.$store.state.url + "/api/child/show/" + this.id)
-                    .then(res => {
-                        this.localSisterInfo = res.data.data[0].family
-                    })
-            }
-        }
+        // if (this.$route.name == "edit-child") {
+        //     this.id = this.$route.params.id
+        //     if (!this.localDate) {
+        //         this.axios.get(this.$store.state.url + "/api/child/show/" + this.id)
+        //             .then(res => {
+        //                 this.localCenterInfo = res.data.data[0].family
+        //             })
+        //     }
+        // }
     },
 
     methods: {
         editItem(item) {
-            this.editedIndex = this.localSisterInfo.indexOf(item)
+            this.editedIndex = this.localCenterInfo.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            this.editedIndex = this.localSisterInfo.indexOf(item)
+            this.editedIndex = this.localCenterInfo.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialogDelete = true
         },
 
         deleteItemConfirm() {
-            this.localSisterInfo.splice(this.editedIndex, 1)
+            this.localCenterInfo.splice(this.editedIndex, 1)
             this.closeDelete()
         },
 
@@ -196,7 +217,7 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
-            this.$emit('table', this.localSisterInfo);
+            this.$emit('table', this.localCenterInfo);
         },
 
         closeDelete() {
@@ -205,16 +226,17 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             })
-            this.$emit('table', this.localSisterInfo);
+            this.$emit('table', this.localCenterInfo);
         },
 
         save() {
+            console.log(this.$v.$error)
             this.$v.$touch()
             if (!this.$v.$error) {
                 if (this.editedIndex > -1) {
-                    Object.assign(this.localSisterInfo[this.editedIndex], this.editedItem)
+                    Object.assign(this.localCenterInfo[this.editedIndex], this.editedItem)
                 } else {
-                    this.localSisterInfo.push(this.editedItem)
+                    this.localCenterInfo.push(this.editedItem)
                 }
                 this.close()
             }

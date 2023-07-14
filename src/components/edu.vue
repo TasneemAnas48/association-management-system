@@ -2,18 +2,24 @@
     <div id="med" class="med add">
         <v-form v-if="load">
             <div class="box" v-for="(box, index) in boxes" :key="index">
-                <h6 class="box-title">
+                <h6 class="box-title" v-if="box.title != 'no title'">
                     {{ box.title }}
                 </h6>
-                <div v-for="(item, i) in box.list" :key="i">
-                    <v-text-field outlined :reverse="true" v-if="item.type == 0" v-model="answer[item.id - 1].answer"
-                        :label="item.question"></v-text-field>
-                    <div class="row" style="margin-right: 5px" v-if="item.type == 1">
-                        <p style="font-size: 18px;">{{ item.question }}</p>
-                        <v-radio-group v-model="answer[item.id - 1].answer" row>
-                            <v-radio :label="ch.choice" :value="ch.choice" v-for="(ch, j) in item.choice" :key="j"></v-radio>
-                        </v-radio-group>
+                <div v-if="box.title != 'التأهيل التربوي للطفل'">
+                    <div v-for="(item, i) in box.list" :key="i">
+                        <v-text-field outlined :reverse="true" v-if="item.type == 0" v-model="answer[item.id - 1].answer"
+                            :label="item.question"></v-text-field>
+                        <div class="row" style="margin-right: 5px" v-if="item.type == 1">
+                            <p style="font-size: 18px;">{{ item.question }}</p>
+                            <v-radio-group v-model="answer[item.id - 1].answer" row>
+                                <v-radio :label="ch.choice" :value="ch.choice" v-for="(ch, j) in item.choice"
+                                    :key="j"></v-radio>
+                            </v-radio-group>
+                        </div>
                     </div>
+                </div>
+                <div v-else>
+                    <edu-table @table="center_info = $event" />
                 </div>
             </div>
             <v-btn @click="submit" :disabled="isSubmit && !response" color="primary" light style="margin-top: 15px">
@@ -37,10 +43,11 @@
 </template>
 
 <script>
-
+import EduTable from "@/components/EduTable.vue"
 export default {
     name: 'Med',
     components: {
+        EduTable
     },
     data: () => ({
         boxes: [],
@@ -52,6 +59,7 @@ export default {
         snackbar: false,
         error_snackbar: false,
         child_id: null,
+        center_info: []
     }),
     methods: {
         getQuestion() {
@@ -87,6 +95,7 @@ export default {
                     answer: item.answer,
                 })
             })
+            console.log(this.center_info)
             this.sendData()
         },
         sendData() {
@@ -95,7 +104,8 @@ export default {
             this.axios.post(this.$store.state.url + "/api/educational_store",
                 {
                     child_id: this.child_id,
-                    ans: this.send_answer
+                    ans: this.send_answer,
+                    center: this.center_info
                 })
                 .then(res => {
                     console.log(res)
