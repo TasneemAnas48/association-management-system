@@ -281,7 +281,10 @@ export default {
             this.axios.post(this.$store.state.url + "/api/personal_info",
                 {
                     child_info: this.send_answer,
-                    sister_info: this.sister_info
+                    sister_info: this.sister_info,
+                    name: this.name,
+                    age: this.age,
+                    phone_number: this.phone_number
                 })
                 .then(res => {
                     console.log(res)
