@@ -252,28 +252,29 @@ export default {
             }
         },
         sendData_1() {
-            const formData = new FormData()
+            // const formData = new FormData()
             let dateStr = this.age;
             let parts = dateStr.split('-');
             this.age = parts.reverse().join('/');
-            formData.append('name', this.name)
-            formData.append('age', this.age)
-            formData.append('phone_number', this.phone_number)
+            // formData.append('name', this.name)
+            // formData.append('age', this.age)
+            // formData.append('phone_number', this.phone_number)
 
-            console.log("____________________________________")
-            console.log(this.name)
-            console.log(this.age)
-            console.log(this.phone_number)
-            console.log("____________________________________")
-            this.axios.post(this.$store.state.url + "/api/child", formData)
-                .then(res => {
-                    console.log(res)
-                    if (res.data.status == "success") {
-                        this.child_id = res.data.data.id
-                        console.log(this.child_id)
-                        this.sendData_2()
-                    }
-                });
+            // console.log("____________________________________")
+            // console.log(this.name)
+            // console.log(this.age)
+            // console.log(this.phone_number)
+            // console.log("____________________________________")
+            // this.axios.post(this.$store.state.url + "/api/child", formData)
+            //     .then(res => {
+            //         console.log(res)
+            //         if (res.data.status == "success") {
+            //             this.child_id = res.data.data.id
+            //             console.log(this.child_id)
+            //             this.sendData_2()
+            //         }
+            //     });
+            this.sendData_2()
         },
         sendData_2() {
             console.log(this.send_answer)
