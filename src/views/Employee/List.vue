@@ -51,7 +51,7 @@
                             </div>
                         </template>
                     </v-data-table>
-                    <v-dialog v-model="dialogTask" max-width="700px">
+                    <v-dialog v-model="dialogTask" max-width="700px" persistent>
                         <v-card v-if="load_task">
                             <v-spacer></v-spacer>
                             <v-card-title class="justify-content-start"
@@ -96,7 +96,7 @@
                                 لايوجد مهمات حاليا
                             </div>
                             <v-card-actions style="justify-content: end; padding-bottom: 30px;margin-left: 20px;">
-                                <v-btn color="primary" @click="dialogTask = false">اغلاق
+                                <v-btn color="primary" @click="close_dialog()">اغلاق
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
@@ -223,6 +223,11 @@ export default {
                     this.tasks = res.data.Task
                     console.log(this.tasks)
                 });
+        },
+        close_dialog() {
+            this.dialogTask = false
+            this.load_task = false
+            this.tasks = []
         }
     },
     mounted() {
@@ -242,7 +247,8 @@ export default {
 .task {
     margin: 25px 50px;
 }
-.no-task{
+
+.no-task {
     display: flex;
     justify-content: center;
     font-size: 20px;
