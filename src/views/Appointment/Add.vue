@@ -3,10 +3,10 @@
         <breadcrumbs :breadcrumbs="bread_add" />
         <div class="card">
             <div class="card-header">
-                إضافة موعد
+                إضافة مهمة
                 <router-link to="/appointment/list">
                     <v-btn color="primary" outlined>
-                        عرض المواعيد
+                        عرض المهمات
                     </v-btn>
                 </router-link>
             </div>
@@ -40,7 +40,7 @@
                                     color="white"></v-progress-circular>
                             </v-btn>
                             <v-snackbar right bottom color="green" text v-model="snackbar" timeout="5000">
-                                تم اضافة الموعد والمهمة بنجاح
+                                تم اضافة المهمة بنجاح
                                 <template v-slot:action="{ attrs }">
                                     <v-btn color="green" text v-bind="attrs" @click="snackbar = false">
                                         اغلاق
@@ -61,7 +61,7 @@
                         <v-dialog ref="dialog" v-model="modal" :return-value.sync="app_date" persistent width="290px"
                                 color="primary">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ الموعد" readonly
+                                    <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ المهمة" readonly
                                         v-bind="attrs" class="my-date" v-on="on" append-icon="mdi-calendar"
                                         :error-messages="appDateErrors"></v-text-field>
                                 </template>
@@ -103,7 +103,7 @@ export default {
         error_snackbar: false,
         bread_add: [
             {
-                text: 'المواعيد',
+                text: 'المهمات',
                 disabled: true,
                 href: '',
             },
@@ -215,14 +215,7 @@ export default {
                     this.response = true
                     console.log(res.data)
                     if (res.data.message == 'A Task has been booked successfully') {
-                        this.snackbar = true
-                        this.child_id = null
-                        this.title = null
-                        this.user_id = null
-                        this.hours = null
-                        this.app_date = null
-                        this.description = null
-                        this.$v.$reset()
+                        this.$router.replace({ name: 'appointment-list' })
                     }
                     else
                         this.error_snackbar = true
@@ -239,8 +232,8 @@ export default {
             const token = localStorage.getItem("token")
             this.axios.get(this.$store.state.url + "/api/show_Employee",  { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
-                    this.user_list = res.data.data
-                    console.log(res.data.data)
+                    this.user_list = res.data.user
+                    console.log(res.data)
                 });
         }
     },

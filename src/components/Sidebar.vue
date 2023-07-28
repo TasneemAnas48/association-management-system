@@ -80,16 +80,16 @@ export default {
         ]
       },
       {
-        title: "المواعيد",
-        icon: "far fa-calendar-alt",
+        title: "المهمات",
+        icon: "fa fa-table-list ",
         child: [
           {
             href: "/appointment/add",
-            title: "إضافة موعد"
+            title: "إضافة مهمة"
           },
           {
             href: "/appointment/list",
-            title: "عرض المواعيد"
+            title: "عرض المهام"
           }
         ]
       },

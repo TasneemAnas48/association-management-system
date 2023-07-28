@@ -106,9 +106,8 @@ export default {
                     this.response = true
                     console.log(res.data)
                     if (res.data.message == "Store employee successfully") {
-                        this.snackbar = true
-                        this.name = ''
-                        this.$v.$reset()
+                        this.$router.replace({ name: 'employee-list' })
+
                     }
                     else
                         this.error_snackbar = true

@@ -68,7 +68,7 @@
                                                 <td>{{ task.child_name }}</td>
                                             </tr>
                                             <tr>
-                                                <td> تاريخ الموعد</td>
+                                                <td> تاريخ المهمة</td>
                                                 <td>{{ task.date_task }}</td>
                                             </tr>
                                             <tr>
@@ -184,8 +184,8 @@ export default {
             this.axios.get(this.$store.state.url + "/api/show_Employee", { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.load = true
-                    this.data = res.data.data
-                    console.log(res.data.data)
+                    this.data = res.data.user
+                    console.log(res.data)
                 });
         },
         deleteItem(item) {

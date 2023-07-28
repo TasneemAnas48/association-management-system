@@ -228,8 +228,24 @@ export default {
             else if (!this.$v.$error) {
                 this.isSubmit = true
                 if (this.$route.name == "add-child") {
+                    let dateStr = this.age;
+                    let parts = dateStr.split('-');
+                    this.age = parts.reverse().join('/');
                     this.my_answer.forEach(item => {
-
+                        if (item.ques_id == 3) {
+                            let dateStr3 = item.answer;
+                            let parts3 = dateStr3.split('-');
+                            item.answer = parts3.reverse().join('/');
+                            console.log("3")
+                            console.log(item.answer)
+                        }
+                        if (item.ques_id == 11) {
+                            let dateStr11 = item.answer;
+                            let parts11 = dateStr11.split('-');
+                            item.answer = parts11.reverse().join('/');
+                            console.log("11")
+                            console.log(item.answer)
+                        }
                         if (item.ques_id != 1 && item.ques_id != 8 && item.answer != '') {
                             this.send_answer.push(item)
                         }
@@ -244,7 +260,7 @@ export default {
                                 answer: this.gender,
                             });
                     })
-                    this.sendData_1()
+                    this.sendData_2()
                 }
                 else {
                     this.editData()
@@ -252,33 +268,42 @@ export default {
             }
         },
         sendData_1() {
-            // const formData = new FormData()
+            const formData = new FormData()
             let dateStr = this.age;
             let parts = dateStr.split('-');
             this.age = parts.reverse().join('/');
-            // formData.append('name', this.name)
-            // formData.append('age', this.age)
-            // formData.append('phone_number', this.phone_number)
+            formData.append('name', this.name)
+            formData.append('age', this.age)
+            formData.append('phone_number', this.phone_number)
 
-            // console.log("____________________________________")
-            // console.log(this.name)
-            // console.log(this.age)
-            // console.log(this.phone_number)
-            // console.log("____________________________________")
-            // this.axios.post(this.$store.state.url + "/api/child", formData)
-            //     .then(res => {
-            //         console.log(res)
-            //         if (res.data.status == "success") {
-            //             this.child_id = res.data.data.id
-            //             console.log(this.child_id)
-            //             this.sendData_2()
-            //         }
-            //     });
+            console.log("____________________________________")
+            console.log(this.name)
+            console.log(this.age)
+            console.log(this.phone_number)
+            console.log("____________________________________")
+            this.axios.post(this.$store.state.url + "/api/child", formData)
+                .then(res => {
+                    console.log(res)
+                    if (res.data.status == "success") {
+                        this.child_id = res.data.data.id
+                        console.log(this.child_id)
+                        this.sendData_2()
+                    }
+                });
             this.sendData_2()
         },
         sendData_2() {
+            // let dateStr = this.age;
+            // let parts = dateStr.split('-');
+            // this.age = parts.reverse().join('/');
+            console.log("____________________________________")
+            console.log(this.name)
+            console.log(this.age)
+            console.log(this.phone_number)
             console.log(this.send_answer)
             console.log(this.sister_info)
+            console.log("____________________________________")
+
             this.axios.post(this.$store.state.url + "/api/personal_info",
                 {
                     child_info: this.send_answer,
@@ -294,9 +319,11 @@ export default {
                         this.back_error = res.data.data
                         this.error_snackbar = true
                         this.send_answer = []
+                        this.response = false
+                        this.isSubmit = false
                     }
 
-                    else{
+                    else {
                         this.snackbar = true
                         this.$router.replace({ name: 'child-list' })
                     }
@@ -315,7 +342,6 @@ export default {
                             if (item.ques_id == 6)
                                 this.gender = item.answer
                             this.my_answer.forEach(itemm => {
-
                                 if (itemm.ques_id == item.ques_id)
                                     itemm.answer = item.answer
                                 if (itemm.ques_id == 4)
@@ -328,49 +354,102 @@ export default {
                         })
                         console.log(res.data.data[0])
                         this.sister_info = res.data.data[0].family
-
                         // this.date = this.my_answer[2].answer
                     })
             }
         },
         editData() {
+            let dateStr = this.age;
+            let parts = dateStr.split('-');
+            this.age = parts.reverse().join('/');
             this.my_answer.forEach(item => {
+                if (item.ques_id == 3) {
+                    let dateStr3 = item.answer;
+                    let parts3 = dateStr3.split('-');
+                    item.answer = parts3.reverse().join('/');
+                    console.log("3")
+                    console.log(item.answer)
+                }
+                if (item.ques_id == 11) {
+                    let dateStr11 = item.answer;
+                    let parts11 = dateStr11.split('-');
+                    item.answer = parts11.reverse().join('/');
+                    console.log("11")
+                    console.log(item.answer)
+                }
                 if (item.ques_id != 1 && item.ques_id != 8) {
                     this.send_answer.push(item)
                 }
-                if (item.ques_id == 4)
-                    this.send_answer.push({
-                        ques_id: 4,
-                        answer: this.age,
-                    });
-                if (item.ques_id == 6)
-                    this.send_answer.push({
-                        ques_id: 6,
-                        answer: this.gender,
-                    });
+                // if (item.answer != '') {
+                // this.send_answer.push(item)
+                // }
+
+                // if (item.ques_id == 4)
+                //     this.send_answer.push({
+                //         ques_id: 4,
+                //         answer: this.age,
+                //     });
+                // if (item.ques_id == 6)
+                //     this.send_answer.push({
+                //         ques_id: 6,
+                //         answer: this.gender,
+                //     });
             })
             console.log(this.name)
             console.log(this.phone_number)
             console.log(this.id)
             console.log(this.send_answer)
             console.log(this.sister_info)
-            this.axios.post(this.$store.state.url + "/api/update_child_info",
-                {
-                    name: this.name,
-                    phone_number: this.phone_number,
-                    child_id: this.id,
-                    child_info: this.send_answer,
-                    sister_info: this.sister_info
-                })
-                .then(res => {
-                    console.log(res.data)
-                    this.response = true
-                    if (res.data.message == "success in update information of child") {
-                        this.snackbar = true
-                        this.$router.replace({ name: 'child-list' })
-                    }
-                });
+            if (this.sister_info.length != 0)
+                this.axios.post(this.$store.state.url + "/api/update_child_info",
+                    {
+                        name: this.name,
+                        phone_number: this.phone_number,
+                        child_id: this.id,
+                        child_info: this.send_answer,
+                        sister_info: this.sister_info
+                    })
+                    .then(res => {
+                        console.log(res)
+                        this.response = true
+                        if (res.data.message == "error in update some information") {
+                            this.back_error = res.data.data
+                            this.error_snackbar = true
+                            this.send_answer = []
+                            this.response = false
+                            this.isSubmit = false
+                        }
+                        else {
+                            this.snackbar = true
+                            this.$router.replace({ name: 'child-list' })
+                        }
+                    })
+            else {
+                this.axios.post(this.$store.state.url + "/api/update_child_info",
+                    {
+                        name: this.name,
+                        phone_number: this.phone_number,
+                        child_id: this.id,
+                        child_info: this.send_answer,
+                    })
+                    .then(res => {
+                        console.log(res)
+                        this.response = true
+                        if (res.data.message == "error in update some information") {
+                            this.back_error = res.data.data
+                            this.error_snackbar = true
+                            this.send_answer = []
+                            this.response = false
+                            this.isSubmit = false
+                        }
+                        else {
+                            this.snackbar = true
+                            this.$router.replace({ name: 'child-list' })
+                        }
+                    })
+            }
         }
+
     },
     mounted() {
         this.route = this.$route.name

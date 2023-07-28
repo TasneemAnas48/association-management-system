@@ -3,10 +3,10 @@
         <breadcrumbs :breadcrumbs="bread" />
         <div class="card">
             <div class="card-header">
-                عرض المواعيد
+                عرض المهمات
                 <router-link to="/appointment/add">
                     <v-btn color="primary" outlined>
-                        إضافة موعد
+                        إضافة مهمة
                     </v-btn>
                 </router-link>
             </div>
@@ -23,7 +23,7 @@
                                 <v-card>
                                     <v-spacer></v-spacer>
                                     <v-card-title class="justify-content-center" style="padding-top: 30px">
-                                        هل انت متأكد من انك تريد حذف الموعد
+                                        هل انت متأكد من انك تريد حذف المهمة
                                     </v-card-title>
                                     <v-card-actions style="padding-bottom: 30px">
                                         <v-spacer></v-spacer>
@@ -50,7 +50,7 @@
                         style="margin-top: 100px"></v-progress-circular>
                 </div>
                 <v-snackbar right bottom color="green" text v-model="snackbar_delete" timeout="5000">
-                    تم حذف الموعد بنجاح
+                    تم حذف المهمة بنجاح
                     <template v-slot:action="{ attrs }">
                         <v-btn color="green" text v-bind="attrs" @click="snackbar_delete = false">
                             اغلاق
@@ -80,12 +80,11 @@ export default {
     },
     data: () => ({
         headers: [
-            { text: 'رقم الموعد', value: 'id', align: "center" },
+            { text: 'رقم المهمة', value: 'id', align: "center" },
             { text: 'اسم الطفل', value: 'child_name', align: "center" },
-            { text: 'تاريخ الموعد', value: 'app_date', align: "center" },
+            { text: 'تاريخ المهمة', value: 'app_date', align: "center" },
             { text: 'اسم الموظف', value: 'user_name', align: "center" },
-            { text: ' الحالة', value: 'infection', align: "center" },
-            { text: 'القسم', value: 'section', align: "center" },
+            { text: 'الحالة', value: 'infection', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
         ],
         search: '',
@@ -96,7 +95,7 @@ export default {
         delete: '',
         bread: [
             {
-                text: 'المواعيد',
+                text: 'المهمات',
                 disabled: true,
                 href: '',
             },
