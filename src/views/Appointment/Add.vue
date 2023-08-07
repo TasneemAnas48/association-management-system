@@ -210,6 +210,8 @@ export default {
             formData.append('description', this.description)
             formData.append('title', this.title)
             formData.append('check', 0)
+            formData.append('notes', "Ededede")
+
             this.axios.post(this.$store.state.url + "/api/Store_Task", formData, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.response = true
@@ -232,7 +234,7 @@ export default {
             const token = localStorage.getItem("token")
             this.axios.get(this.$store.state.url + "/api/show_Employee",  { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
-                    this.user_list = res.data.user
+                    this.user_list = res.data.data
                     console.log(res.data)
                 });
         }

@@ -184,7 +184,7 @@ export default {
             this.axios.get(this.$store.state.url + "/api/show_Employee", { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.load = true
-                    this.data = res.data.user
+                    this.data = res.data.data
                     console.log(res.data)
                 });
         },

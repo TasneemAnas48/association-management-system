@@ -7,18 +7,31 @@
 
                 <b-nav-item-dropdown right>
                     <template #button-content>
+                        <v-badge v-if="messages != 0" :content="messages" style="left: 41px;top: 0px;position: absolute;" bordered overlap
+                        color="green"></v-badge>
                         <b-icon icon="bell-fill"></b-icon>
-                        <!-- {{ display_lang }} -->
                     </template>
-                    <b-dropdown-item>
+                    <div class="new">
+                        <b-dropdown-item v-for="(item, index) in new_notification" :key="index">
                         <div class="title">
-                            عنوان الاشعار
+                            {{ item.title }}
                         </div>
                         <div class="disc">
-                            محتوى الاشعار الوارد من فلان
+                            {{ item.message }}
+                        </div>
+                    </b-dropdown-item>
+                    </div>
+
+                    <b-dropdown-item v-for="(item, index) in notification" :key="index">
+                        <div class="title">
+                            {{ item.title }}
+                        </div>
+                        <div class="disc">
+                            {{ item.message }}
                         </div>
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
+                <v-btn @click="finish()">Finish task</v-btn>
 
                 <!-- <b-nav-item-dropdown right>
                     <template #button-content>
@@ -37,6 +50,9 @@ export default {
     name: 'Navbar',
 
     data: () => ({
+        notification: [],
+        new_notification: [],
+        messages: 0
     }),
     // computed: {
     //     isAr() {
@@ -46,27 +62,71 @@ export default {
     //     },
     // },
     methods: {
-        logout(){
+        logout() {
             this.removeFromStore()
             this.removeFromlocalStorage()
             this.$router.replace({ name: 'welcome' })
         },
-        removeFromStore(){
+        removeFromStore() {
             this.$store.state.token = null
             this.$store.state.id = null
             this.$store.state.name = null
             this.$store.state.email = null
             this.$store.state.role = null
         },
-        removeFromlocalStorage(){
+        removeFromlocalStorage() {
             localStorage.setItem("token", '')
             localStorage.setItem("id", '')
             localStorage.setItem("name", '')
             localStorage.setItem("email", '')
             localStorage.setItem("role", '')
-        }
+        },
+        finish() {
+            const formData = new FormData()
+            formData.append('notes', "eeeeeeeee")
+            this.axios.post(this.$store.state.url + "/api/task/terminate/1", formData)
+                .then(res => {
+                    // console.log(res.data)
+                });
+        },
+        getPusher() {
+            var channel = this.$pusher.subscribe("public-channel.1")
+            var that = this;
+            channel.bind('NotificationEvent', function (data) {
+                // console.log(data)
+                that.new_notification.push(data)
+                that.new_notification = that.new_notification.reverse()
+                that.increase_messsage()
+                // console.log(that.new_notification)
+
+
+                // 
+                // that.notification_data.push(data)
+                // that.notification_data = that.notification_data.reverse()
+                // console.log(that.notification_data)
+                // that.increase_messsage()
+                // console.log(that.messages)
+                // if (that.notification_data.length != 0)
+                //     that.empty2 = false
+            });
+        },
+        increase_messsage() {
+            this.messages = this.messages + 1
+            // console.log(this.messages)
+        },
+        getNotification() {
+            this.axios.get(this.$store.state.url + "/api/admin/notifications/1")
+                .then(res => {
+                    this.notification = res.data.data
+                    this.notification = this.notification.reverse()
+
+                    // console.log(res.data.data)
+                })
+        },
     },
     mounted() {
+        this.getPusher()
+        this.getNotification()
     }
 };
 </script>
@@ -77,6 +137,10 @@ export default {
     border-bottom: 1px solid #e6e6e6;
     box-shadow: 0 0 10px #e4e4e4;
     padding: 15px !important;
+}
+
+.new {
+    background-color: #dedede85;
 }
 
 .navbar .bi-person-fill {
@@ -105,7 +169,9 @@ export default {
 }
 
 .navbar .dropdown-menu {
-    padding: 10px 0px
+    padding: 10px 0px;
+    height: 315px;
+    overflow: auto;
 }
 
 .navbar .dropdown-toggle::after {
@@ -119,13 +185,17 @@ export default {
 
 .navbar .dropdown-item {
     text-align: justify;
+    border-bottom: 1px solid #80808054;
+    padding-bottom: 15px;
 }
 
 .navbar-light .navbar-nav .nav-link {
     color: var(--v-primary-base) !important;
 }
+
 .dropdown-item:active {
     color: #fff;
     text-decoration: none;
     background-color: var(--v-primary-base) !important;
-}</style>
+}
+</style>

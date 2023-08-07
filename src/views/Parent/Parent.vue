@@ -126,7 +126,6 @@ export default {
                     console.log(res.data)
                     if (res.data.message == "success in add advice..") {
                         this.$router.replace({ name: 'parent-list' })
-
                     }
                     else
                         this.error_snackbar = true

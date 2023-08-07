@@ -34,7 +34,18 @@ Vue.use(Vuelidate)
 
 import i18n from './i18n';
 
+// import Pusher from 'pusher-js'
 
+
+// Pusher.logToConsole = true;
+Vue.use(require('vue-pusher'), {
+    api_key: 'f2c0c09b41262ac3f4ff',
+    options: {
+        cluster: 'ap2',
+        encrypted: true,
+        forceTLS: true,
+    }
+});
 
 
 
