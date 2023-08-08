@@ -98,9 +98,6 @@ export default {
                 that.new_notification = that.new_notification.reverse()
                 that.increase_messsage()
                 // console.log(that.new_notification)
-
-
-                // 
                 // that.notification_data.push(data)
                 // that.notification_data = that.notification_data.reverse()
                 // console.log(that.notification_data)

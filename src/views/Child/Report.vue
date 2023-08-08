@@ -81,7 +81,7 @@
                 </div>
                 <div class="row justify-content-center" style="margin-top: 50px">
                     <div class="col-lg-10">
-                        <v-simple-table dense >
+                        <v-simple-table dense>
                             <template v-slot:default>
                                 <thead>
                                     <tr style="height: 65px;">
@@ -251,6 +251,10 @@ export default {
             xaxis: {
                 categories: ['الحركي', 'العناية', 'الاتصالي', 'المعرفي', 'الاجتماعي'],
             },
+            yaxis: {
+                floating: true,
+                decimalsInFloat: 2
+            },
             fill: {
                 opacity: 1
             },
@@ -297,11 +301,12 @@ export default {
                 this.chart_old.push(this.data2.data[0].old_know_ratio)
                 this.chart_old.push(this.data2.data[0].old_social_ratio)
 
-                this.chart_new.push(this.data2.data[0].old_montor_ratio)
-                this.chart_new.push(this.data2.data[0].old_care_ratio)
-                this.chart_new.push(this.data2.data[0].old_comm_ratio)
-                this.chart_new.push(this.data2.data[0].old_know_ratio)
-                this.chart_new.push(this.data2.data[0].old_social_ratio)
+                this.chart_new.push(this.data2.data[0].new_montor_ratio)
+                this.chart_new.push(this.data2.data[0].new_care_ratio)
+                this.chart_new.push(this.data2.data[0].new_comm_ratio)
+                this.chart_new.push(this.data2.data[0].new_know_ratio)
+                this.chart_new.push(this.data2.data[0].new_social_ratio)
+                console.log(this.chart_new)
                 this.series = [
                     {
                         name: 'جديد',
