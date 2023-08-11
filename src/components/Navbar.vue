@@ -28,7 +28,7 @@
                             انهاء مهمة
                         </div>
                         <div class="disc">
-                            تم انهاء المهمة {{ item.title }} بنجاح
+                            تم انهاء المهمة "{{ item.title }}" بنجاح
                         </div>
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
