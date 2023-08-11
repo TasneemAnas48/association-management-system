@@ -7,27 +7,28 @@
 
                 <b-nav-item-dropdown right>
                     <template #button-content>
-                        <v-badge v-if="messages != 0" :content="messages" style="left: 41px;top: 0px;position: absolute;" bordered overlap
-                        color="green"></v-badge>
+                        <v-badge v-if="messages != 0" :content="messages" style="left: 41px;top: 0px;position: absolute;"
+                            bordered overlap color="green"></v-badge>
                         <b-icon icon="bell-fill"></b-icon>
                     </template>
                     <div class="new">
-                        <b-dropdown-item v-for="(item, index) in new_notification" :key="index">
-                        <div class="title">
-                            {{ item.title }}
-                        </div>
-                        <div class="disc">
-                            {{ item.message }}
-                        </div>
-                    </b-dropdown-item>
+                        <b-dropdown-item v-for="(item, index) in new_notification" :key="index"
+                            @click="display_task(item.id)">
+                            <div class="title">
+                                {{ item.title }}
+                            </div>
+                            <div class="disc">
+                                {{ item.message }}
+                            </div>
+                        </b-dropdown-item>
                     </div>
 
-                    <b-dropdown-item v-for="(item, index) in notification" :key="index">
+                    <b-dropdown-item v-for="(item, index) in notification" :key="index" @click="display_task(item.id)">
                         <div class="title">
-                            {{ item.title }}
+                            انهاء مهمة
                         </div>
                         <div class="disc">
-                            {{ item.message }}
+                            تم انهاء المهمة  {{ item.title }} بنجاح
                         </div>
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
@@ -84,7 +85,7 @@ export default {
         finish() {
             const formData = new FormData()
             formData.append('notes', "eeeeeeeee")
-            this.axios.post(this.$store.state.url + "/api/task/terminate/1", formData)
+            this.axios.post(this.$store.state.url + "/api/task/terminate/3", formData)
                 .then(res => {
                     // console.log(res.data)
                 });
@@ -115,11 +116,13 @@ export default {
             this.axios.get(this.$store.state.url + "/api/admin/notifications/1")
                 .then(res => {
                     this.notification = res.data.data
-                    this.notification = this.notification.reverse()
-
+                    // this.notification = this.notification.reverse()
                     console.log(res.data.data)
                 })
         },
+        display_task(id) {
+            this.$router.replace({ name: 'task-finish', params: { id: id } })
+        }
     },
     mounted() {
         this.getPusher()
@@ -167,8 +170,7 @@ export default {
 
 .navbar .dropdown-menu {
     padding: 10px 0px;
-    // height: 315px;
-    height: -webkit-fill-available;
+    height: 315px;
     overflow: auto;
 }
 

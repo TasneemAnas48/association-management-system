@@ -55,17 +55,22 @@
                                 </v-radio-group>
                             </div>
                         </div>
-                        <div v-for="(error, i) in Errors" :key="`${i}-${error}`">
-                            <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="30000">
-                                {{ error }}
-                            </v-snackbar>
-                        </div>
+                        <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="30000">
+                            <ul style="padding: 22px;">
+                                <li v-for="(error, j) in my_error" :key="j">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </v-snackbar>
                         <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="30000">
                             <ul style=" padding: 0px 20px;">
                                 <li v-for="(error, i) in back_error" :key="i">
                                     {{ error }}
                                 </li>
                             </ul>
+                        </v-snackbar>
+                        <v-snackbar right bottom color="red" text v-model="error_snackbar2" timeout="3000">
+                            يجب ادخال عدد اخوة مطابق لما تم ادخاله في جدول الاخوات
                         </v-snackbar>
                     </div>
                     <div class="box">
@@ -136,6 +141,7 @@ export default {
         isSubmit: false,
         snackbar: false,
         error_snackbar: false,
+        error_snackbar2: false,
         date: null,
         bread_add: [
             {
@@ -176,7 +182,8 @@ export default {
         sister_info: [],
         gender: null,
         id: null,
-        back_error: []
+        back_error: [],
+        my_error:[]
     }),
     validations: {
         name: { required },
@@ -185,7 +192,11 @@ export default {
         gender: { required },
     },
     computed: {
+        
+    },
+    methods: {
         Errors() {
+            this.$v.$touch()
             const errors = []
             if (!this.$v.name.$dirty) return errors
             !this.$v.name.required && errors.push('الرجاء ادخال اسم الطالب')
@@ -198,10 +209,9 @@ export default {
             !this.$v.phone_number.maxLength && errors.push('الرجاء ادخال رقم هاتف صحيح مكون من 10 ارقام')
             !this.$v.phone_number.required && errors.push('الرجاء ادخال رقم الهاتف')
             !this.$v.phone_number.numeric && errors.push('الرجاء ادخال رقم هاتف صحيح مكون من 10 ارقام')
-            return errors.reverse()
+            this.my_error = errors.reverse()
+            // return errors.reverse()
         },
-    },
-    methods: {
         getQuestion() {
             this.axios.get(this.$store.state.url + "/api/personal_question/all")
                 .then(res => {
@@ -218,14 +228,25 @@ export default {
                             this.family_ques.push(item);
                     })
                     this.personal_length = this.personal_ques.length
-                    // console.log(this.personal_length)
+                    // console.log(this.question)
                 })
         },
         submit() {
-            this.$v.$touch()
-            if (this.$v.$error)
+            this.Errors()
+            this.error_snackbar = false
+            this.error_snackbar2 = false
+            this.my_answer.forEach(item => {
+                if (item.ques_id == 30) {
+                    if (item.answer != this.sister_info.length)
+                        this.error_snackbar2 = true
+                }
+            })
+            // console.log(this.my_error)
+            if (this.$v.$error){
                 this.error_snackbar = true
-            else if (!this.$v.$error) {
+                console.log(this.my_error)
+            }
+            else if (!this.$v.$error && !this.error_snackbar2) {
                 this.isSubmit = true
                 if (this.$route.name == "add-child") {
                     let dateStr = this.age;
@@ -327,7 +348,9 @@ export default {
                         this.snackbar = true
                         this.$router.replace({ name: 'child-list' })
                     }
-                });
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
         initEdit() {
             if (this.$route.name == "edit-child") {
@@ -423,7 +446,9 @@ export default {
                             this.snackbar = true
                             this.$router.replace({ name: 'child-list' })
                         }
-                    })
+                    }).catch(error => {
+                    this.error_snackbar = true
+                })
             else {
                 this.axios.post(this.$store.state.url + "/api/update_child_info",
                     {
@@ -446,7 +471,9 @@ export default {
                             this.snackbar = true
                             this.$router.replace({ name: 'child-list' })
                         }
-                    })
+                    }).catch(error => {
+                    this.error_snackbar = true
+                })
             }
         }
 

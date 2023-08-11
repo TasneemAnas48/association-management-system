@@ -20,7 +20,7 @@ import Parent from "@/views/Parent/Parent.vue"
 import ParentList from "@/views/Parent/List.vue"
 import ReportChild from "@/views/Child/Report.vue"
 import PrintChild from "@/views/Child/Print.vue"
-
+import TaskFinish from "@/views/Appointment/Finish.vue"
 import Register from "@/views/Login/Register.vue"
 Vue.use(VueRouter)
 
@@ -109,6 +109,11 @@ const routes = [
     path: '/appointment/add',
     name: 'add-appointment',
     component: AddAppointment
+  },
+  {
+    path: '/task/finish/:id',
+    name: 'task-finish',
+    component: TaskFinish
   },
   {
     path: '/phones/list',

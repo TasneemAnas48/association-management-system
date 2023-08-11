@@ -26,10 +26,23 @@
                                 label=" عنوان المهمة"></v-text-field>
 
 
-                            <v-select outlined v-model="user_id" :reverse="true" :items="user_list" item-text="name"
-                                item-value="emp_id" label="اسناد المهمة لـ" :error-messages="userErrors"
-                                @input="$v.user_id.$touch()"></v-select>
-
+                            <v-dialog ref="dialog" v-model="modal" :return-value.sync="app_date" persistent width="290px"
+                                color="primary">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ المهمة" readonly
+                                        v-bind="attrs" class="my-date" v-on="on" append-icon="mdi-calendar"
+                                        :error-messages="appDateErrors"></v-text-field>
+                                </template>
+                                <v-date-picker v-model="app_date" scrollable :allowed-dates="allowedDates">
+                                    <v-spacer></v-spacer>
+                                    <v-btn text color="primary" @click="modal = false">
+                                        إلغاء
+                                    </v-btn>
+                                    <v-btn text color="primary" @click="$refs.dialog.save(app_date)">
+                                        موافق
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-dialog>
                             <v-text-field outlined :reverse="true" v-model="hours" :error-messages="hoursErrors"
                                 label="عدد ساعات انجاز المهمة"></v-text-field>
 
@@ -50,7 +63,15 @@
                             <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="5000">
                                 حدث خطأ غير متوقع، الرجاء اعادة المحاولة
                                 <template v-slot:action="{ attrs }">
-                                    <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+                                    <v-btn color="red" text v-bind="attrs" @click="error_snackbar = false">
+                                        اغلاق
+                                    </v-btn>
+                                </template>
+                            </v-snackbar>
+                            <v-snackbar right bottom color="red" text v-model="error_snackbar2" timeout="5000">
+                                الرجاء ادخال الساعة خلال اوقات الدوام (8 -18)
+                                <template v-slot:action="{ attrs }">
+                                    <v-btn color="red" text v-bind="attrs" @click="error_snackbar2 = false">
                                         اغلاق
                                     </v-btn>
                                 </template>
@@ -58,27 +79,31 @@
                         </v-form>
                     </div>
                     <div class="col-lg-6">
-                        <v-dialog ref="dialog" v-model="modal" :return-value.sync="app_date" persistent width="290px"
-                            color="primary">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ المهمة" readonly
-                                    v-bind="attrs" class="my-date" v-on="on" append-icon="mdi-calendar"
-                                    :error-messages="appDateErrors"></v-text-field>
-                            </template>
-                            <v-date-picker v-model="app_date" scrollable :allowed-dates="allowedDates">
-                                <v-spacer></v-spacer>
-                                <v-btn text color="primary" @click="modal = false">
-                                    إلغاء
-                                </v-btn>
-                                <v-btn text color="primary" @click="$refs.dialog.save(app_date)">
-                                    موافق
-                                </v-btn>
-                            </v-date-picker>
-                        </v-dialog>
+                        <v-select outlined v-model="user_id" :reverse="true" :items="user_list" item-text="name"
+                            item-value="emp_id" label="اسناد المهمة لـ" :error-messages="userErrors"
+                            @input="$v.user_id.$touch()"></v-select>
+
+
 
                         <v-text-field outlined :reverse="true" v-model="description" :error-messages="desErrors"
                             label="تفاصيل المهمة"></v-text-field>
-                        <img src="@/assets/img/app2.png" style="width: 90%; position: relative; top: -20px; right: 20px;" />
+                        <v-dialog ref="dialog2" v-model="modal2" :return-value.sync="time" persistent width="290px">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field class="my-time" outlined :reverse="true" v-model="time" label="الساعة"
+                                    append-icon="mdi-clock-time-four-outline" readonly v-bind="attrs"
+                                    v-on="on"></v-text-field>
+                            </template>
+                            <v-time-picker format="24hr" v-if="modal2" v-model="time" full-width>
+                                <v-spacer></v-spacer>
+                                <v-btn text color="primary" @click="modal2 = false">
+                                    إلغاء
+                                </v-btn>
+                                <v-btn text color="primary" @click="$refs.dialog2.save(time)">
+                                    موافق
+                                </v-btn>
+                            </v-time-picker>
+                        </v-dialog>
+                        <!-- <img src="@/assets/img/app2.png" style="width: 90%; position: relative; top: -20px; right: 20px;" /> -->
                     </div>
                 </div>
             </div>
@@ -101,6 +126,7 @@ export default {
         isSubmit: false,
         snackbar: false,
         error_snackbar: false,
+        error_snackbar2: false,
         bread_add: [
             {
                 text: 'المهمات',
@@ -122,7 +148,10 @@ export default {
         user_id: null,
         hours: null,
         description: null,
-        title: null
+        title: null,
+        time: null,
+        menu2: false,
+        modal2: false,
     }),
     validations: {
         child_id: { required },
@@ -173,12 +202,24 @@ export default {
         }
     },
     methods: {
-        allowedDates: val => val >= new Date().toJSON().slice(0,10),
-
+        allowedDates: val => val >= new Date().toJSON().slice(0, 10),
 
         submit() {
+            // console.log(this.time)
+            // if (this.time > 18 || this.time < 8)
+            //     console.log("false: " + this.time)
+            // else console.log("true: " + this.time)
+            if (this.time) {
+                const selectedHour = parseInt(this.time.split(':')[0]);
+                if (selectedHour >= 8 && selectedHour <= 17) {
+                    console.log("true: " + this.time)
+                } else {
+                    console.log("false: " + this.time)
+                    this.error_snackbar2 = true
+                }
+            }
             this.$v.$touch()
-            if (!this.$v.$error) {
+            if (!this.$v.$error && !this.error_snackbar2) {
                 this.isSubmit = true
                 this.sendData_1()
             }
@@ -201,7 +242,9 @@ export default {
                     }
                     else
                         this.error_snackbar = true
-                });
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
         sendData_2() {
             const token = localStorage.getItem("token")
@@ -211,6 +254,8 @@ export default {
             formData.append('hours', this.hours)
             formData.append('description', this.description)
             formData.append('title', this.title)
+            formData.append('start', this.time)
+
             formData.append('check', 0)
 
             this.axios.post(this.$store.state.url + "/api/Store_Task", formData, { headers: { 'Authorization': `Bearer ${token}` } })
@@ -222,7 +267,9 @@ export default {
                     }
                     else
                         this.error_snackbar = true
-                });
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
         getChild() {
             this.axios.get(this.$store.state.url + "/api/childs/names")
@@ -253,5 +300,9 @@ export default {
 
 .my-date .v-label--active {
     right: -30px !important
+}
+
+.my-time .v-label--active {
+    right: -25px !important
 }
 </style>

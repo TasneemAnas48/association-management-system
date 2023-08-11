@@ -31,7 +31,7 @@
 export default {
   name: 'Sidebar',
   data: () => ({
-    menu: [
+    adm_menu: [
       {
         href: "/",
         title: "لوحة التحكم",
@@ -107,7 +107,7 @@ export default {
           }
         ]
       },
-      
+
       {
         href: "/phones/list",
         title: "دليل الهاتف ",
@@ -118,7 +118,69 @@ export default {
         title: "تسجيل خروج",
         icon: "fas fa-door-open"
       },
-    ]
+    ],
+    spe_menu: [
+      {
+        href: "/",
+        title: "لوحة التحكم",
+        icon: "fa fa-home"
+      },
+      {
+        title: "الأطفال",
+        icon: "fas fa-baby",
+        child: [
+          {
+            href: "/child/add",
+            title: "إضافة طفل"
+          },
+          {
+            href: "/child/list",
+            title: "عرض الأطفال"
+          }
+        ]
+      },
+      {
+        title: "المهمات",
+        icon: "fa fa-table-list ",
+        child: [
+          {
+            href: "/appointment/add",
+            title: "إضافة مهمة"
+          },
+          {
+            href: "/appointment/list",
+            title: "عرض المهام"
+          }
+        ]
+      },
+      {
+        title: "تواصل مع الأهل",
+        icon: "	fas fa-user-friends",
+        child: [
+          {
+            href: "/parent/message/add",
+            title: "إضافة رسالة"
+          },
+          {
+            href: "/parent/message/list",
+            title: "عرض الرسائل"
+          }
+        ]
+      },
+
+      {
+        href: "/phones/list",
+        title: "دليل الهاتف ",
+        icon: "far fa-file-alt"
+      },
+      {
+        // href: "/",
+        title: "تسجيل خروج",
+        icon: "fas fa-door-open"
+      },
+    ],
+    role: '',
+    menu: []
   }),
   methods: {
     onToggleCollapse(collapsed) {
@@ -151,8 +213,13 @@ export default {
     }
   },
   mounted() {
-
+    this.role = localStorage.getItem("role")
+    if (this.role == "admin")
+      this.menu = this.adm_menu
+    else
+      this.menu = this.spe_menu
   }
+
 }
 </script>
 

@@ -141,11 +141,11 @@ export default {
     },
     data: () => ({
         headers: [
-            { text: 'id', value: 'emp_id', align: "center" },
             { text: 'الاسم', value: 'name', align: "center" },
+            { text: 'البريد الالكتروني ', value: 'email', align: "center" },
+            { text: ' المستوى العلمي  ', value: 'scientific_level', align: "center" },
             { text: 'عدد المهمات', value: 'count', align: "center" },
             { text: 'النقاط', value: 'points', align: "center" },
-            { text: 'البريد الالكتروني ', value: 'email', align: "center" },
             { text: ' عرض المهمات ', value: 'display', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
         ],

@@ -100,8 +100,7 @@ export default {
                     this.response = true
                     console.log(res.data)
                     if (res.data.message == "login success") {
-                        // this.addtoStore(res.data.token, res.data.user.emp_id, res.data.user.name, res.data.user.email, "specialist")
-                        // this.addlocalStorage(res.data.token, res.data.user.emp_id, res.data.user.name, res.data.user.email, "specialist")
+                        this.addlocalStorage(res.data.data.token, res.data.data.emp_id, res.data.data.name, res.data.data.email, "specialist")
                         this.$router.replace({ name: 'dashboard' })
                     }
                     else {
@@ -122,13 +121,6 @@ export default {
                         console.error(error);
                     }
                 });
-        },
-        addtoStore(token, id, name, email, role) {
-            this.$store.state.token = token
-            this.$store.state.id = id
-            this.$store.state.name = name
-            this.$store.state.email = email
-            this.$store.state.role = role
         },
         addlocalStorage(token, id, name, email, role) {
             localStorage.setItem("token", token)

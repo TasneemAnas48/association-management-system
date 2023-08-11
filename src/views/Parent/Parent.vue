@@ -40,7 +40,7 @@
                             <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="5000">
                                 حدث خطأ غير متوقع، الرجاء إعادة المحاولة
                                 <template v-slot:action="{ attrs }">
-                                    <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+                                    <v-btn color="red" text v-bind="attrs" @click="error_snackbar = false">
                                         اغلاق
                                     </v-btn>
                                 </template>
@@ -129,7 +129,9 @@ export default {
                     }
                     else
                         this.error_snackbar = true
-                });
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
         getChild() {
             this.axios.get(this.$store.state.url + "/api/childs/names")

@@ -35,7 +35,7 @@
                             <v-snackbar right bottom color="red" text v-model="error_snackbar" timeout="5000">
                                 حدث خطأ غير متوقع، الرجاء اعادة المحاولة
                                 <template v-slot:action="{ attrs }">
-                                    <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
+                                    <v-btn color="red" text v-bind="attrs" @click="error_snackbar = false">
                                         اغلاق
                                     </v-btn>
                                 </template>
