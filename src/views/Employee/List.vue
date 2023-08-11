@@ -88,6 +88,14 @@
                                                 <td v-if="task.check == 0">لم يتم الانجاز</td>
                                                 <td v-if="task.check == 1"> تم الانجاز</td>
                                             </tr>
+                                            <tr v-if="task.notes != null">
+                                                <td> ملاحظات الموظف </td>
+                                                <td>{{ task.notes }}</td>
+                                            </tr>
+                                            <tr v-if="task.points != null">
+                                                <td> النقاط </td>
+                                                <td>{{ task.points }}</td>
+                                            </tr>
                                         </tbody>
                                     </template>
                                 </v-simple-table>
