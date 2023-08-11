@@ -20,6 +20,8 @@ import Parent from "@/views/Parent/Parent.vue"
 import ParentList from "@/views/Parent/List.vue"
 import ReportChild from "@/views/Child/Report.vue"
 import PrintChild from "@/views/Child/Print.vue"
+
+import Register from "@/views/Login/Register.vue"
 Vue.use(VueRouter)
 
 const routes = [
@@ -67,6 +69,11 @@ const routes = [
     path: '/login/specialist',
     name: 'login-specialist',
     component: LoginOther
+  },
+  {
+    path: '/register/specialist',
+    name: 'register-specialist',
+    component: Register
   },
   {
     path: '/dashboard',

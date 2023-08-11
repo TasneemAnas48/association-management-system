@@ -82,7 +82,7 @@ export default {
         headers: [
             { text: 'id', value: 'id', align: "center" },
             { text: 'الاسم', value: 'name', align: "center" },
-            { text: 'الرمز الشخصي ', value: 'unique_number', align: "center" },
+            { text: 'البريد الالكتروني ', value: 'email', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
         ],
         snackbar: false,

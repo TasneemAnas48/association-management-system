@@ -93,7 +93,7 @@ export default {
             var channel = this.$pusher.subscribe("public-channel.1")
             var that = this;
             channel.bind('NotificationEvent', function (data) {
-                // console.log(data)
+                console.log(data)
                 that.new_notification.push(data)
                 that.new_notification = that.new_notification.reverse()
                 that.increase_messsage()
@@ -117,7 +117,7 @@ export default {
                     this.notification = res.data.data
                     this.notification = this.notification.reverse()
 
-                    // console.log(res.data.data)
+                    console.log(res.data.data)
                 })
         },
     },
@@ -167,7 +167,8 @@ export default {
 
 .navbar .dropdown-menu {
     padding: 10px 0px;
-    height: 315px;
+    // height: 315px;
+    height: -webkit-fill-available;
     overflow: auto;
 }
 

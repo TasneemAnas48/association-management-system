@@ -15,7 +15,9 @@
                     <div class="col-lg-6">
                         <v-form>
                             <v-text-field outlined :reverse="true" v-model="name" :error-messages="nameErrors"
-                                label="اسم الاخصائي "></v-text-field>
+                                label="الاسم الكامل  "></v-text-field>
+                            <v-text-field outlined :reverse="true" v-model="email" :error-messages="emailErrors"
+                                label="البريد الالكتروني "></v-text-field>
                             <v-btn @click="submit" :disabled="isSubmit && !response" color="primary" light
                                 style="margin-top: 15px">
                                 إضافة
@@ -52,7 +54,7 @@
 <script>
 import Breadcrumbs from "@/components/Breadcrumbs.vue"
 import { validationMixin } from 'vuelidate'
-import { required } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
 export default {
     name: 'Addspecialist',
     components: {
@@ -77,9 +79,11 @@ export default {
             },
         ],
         name: '',
+        email: '',
     }),
     validations: {
         name: { required },
+        email: { required, email },
     },
     computed: {
         nameErrors() {
@@ -87,7 +91,14 @@ export default {
             if (!this.$v.name.$dirty) return errors
             !this.$v.name.required && errors.push('هذا الحقل مطلوب')
             return errors
-        }
+        },
+        emailErrors() {
+            const errors = []
+            if (!this.$v.email.$dirty) return errors
+            !this.$v.email.required && errors.push('هذا الحقل مطلوب')
+            !this.$v.email.email && errors.push('الرجاء ادخال بريد الكتروني صحيح')
+            return errors
+        },
     },
     methods: {
 
@@ -103,17 +114,20 @@ export default {
             const token = localStorage.getItem("token")
             const formData = new FormData()
             formData.append('name', this.name)
+            formData.append('email', this.email)
+
             this.axios.post(this.$store.state.url + "/api/AddSpecialist", formData, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.response = true
                     console.log(res.data)
                     if (res.data.message == "Store Specialist successfully") {
                         this.$router.replace({ name: 'specialist-list' })
-
                     }
                     else
                         this.error_snackbar = true
-                });
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
     },
     mounted() {

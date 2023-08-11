@@ -88,7 +88,8 @@ export default {
             console.log(this.unique)
             const formData = new FormData()
             formData.append('email', this.email)
-            formData.append('unique_number', this.unique)
+            formData.append('password', this.unique)
+
             formData.append('role', 'admin')
             this.axios.post(this.$store.state.url + "/api/LoginAdmin", formData)
                 .then(res => {

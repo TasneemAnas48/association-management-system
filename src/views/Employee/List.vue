@@ -145,7 +145,7 @@ export default {
             { text: 'الاسم', value: 'name', align: "center" },
             { text: 'عدد المهمات', value: 'count', align: "center" },
             { text: 'النقاط', value: 'points', align: "center" },
-            { text: 'الرمز الشخصي ', value: 'unique_number', align: "center" },
+            { text: 'البريد الالكتروني ', value: 'email', align: "center" },
             { text: ' عرض المهمات ', value: 'display', align: "center" },
             { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
         ],

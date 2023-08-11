@@ -4,25 +4,22 @@
             <v-card class="login-card">
                 <div class="row" style="align-items: center;">
                     <div class="col-lg-6">
-                        <h3 class="my-title">تسجيل دخول اخصائي</h3>
+                        <h3 class="my-title">انشاء حساب اخصائي</h3>
                         <v-form style="margin-top: 70px">
                             <v-text-field type="email" outlined :reverse="true" v-model="email"
                                 :error-messages="emailErrors" label="البريد الالكتروني"></v-text-field>
                             <v-text-field type="password" outlined :reverse="true" v-model="password"
                                 :error-messages="passwordErrors" label="كلمة المرور"></v-text-field>
+                            <v-text-field type="password" outlined :reverse="true" v-model="confrim"
+                                :error-messages="confrimErrors" label="تأكيد كلمة المرور"></v-text-field>
                         </v-form>
                         <div class="row" style="margin-right: 5px">
                             <v-btn @click="submit" :disabled="isSubmit && !response" color="primary" light
                                 style="margin-top: 15px">
-                                تسجل الدخول
+                                انشاء حساب
                                 <v-progress-circular :size="20" v-if="isSubmit && !response" indeterminate color="white"
                                     style="margin-right: 15px;"></v-progress-circular>
                             </v-btn>
-                            <router-link to="/register/specialist">
-                                <v-btn color="primary" outlined style="margin-top: 15px; margin-right: 30px">
-                                    انشاء حساب
-                                </v-btn>
-                            </router-link>
                         </div>
                         <v-snackbar left bottom color="red" text v-model="snackbar" timeout="5000">
                             المعلومات المدخلة غير صحيحة، الرجاء اعادة المحاولة
@@ -30,6 +27,16 @@
                                 <v-btn color="red " text v-bind="attrs" @click="snackbar = false">
                                     اغلاق
                                 </v-btn>
+                            </template>
+                        </v-snackbar>
+                        <v-snackbar left bottom color="green" text v-model="true_snackbar" timeout="5000">
+                            تم انشاء الحساب بنجاح، يمكنك الان تسجيل الدخول
+                            <template v-slot:action="{ attrs }">
+                                <router-link to="/login/specialist">
+                                    <v-btn color="green" text v-bind="attrs" @click="true_snackbar = false">
+                                        تسجيل الدخول
+                                    </v-btn>
+                                </router-link>
                             </template>
                         </v-snackbar>
                     </div>
@@ -46,7 +53,7 @@
 <script>
 
 import { validationMixin } from 'vuelidate'
-import { required, email } from 'vuelidate/lib/validators'
+import { required, email, sameAs, minLength } from 'vuelidate/lib/validators'
 
 export default {
     name: 'Login',
@@ -55,15 +62,18 @@ export default {
     mixins: [validationMixin],
     validations: {
         email: { required, email },
-        password: { required },
+        password: { required, minLength: minLength(8) },
+        confrim: { required, sameAs: sameAs('password') },
     },
 
     data: () => ({
         response: false,
         isSubmit: false,
         snackbar: false,
+        true_snackbar: false,
         email: '',
         password: '',
+        confrim: ''
     }),
 
     computed: {
@@ -78,6 +88,14 @@ export default {
             const errors = []
             if (!this.$v.password.$dirty) return errors
             !this.$v.password.required && errors.push('هذا الحقل مطلوب')
+            !this.$v.password.minLength && errors.push('الرجاء ادخال كلمة مرور لا تقل عن 8 رموز')
+            return errors
+        },
+        confrimErrors() {
+            const errors = []
+            if (!this.$v.confrim.$dirty) return errors
+            !this.$v.confrim.required && errors.push('هذا الحقل مطلوب')
+            !this.$v.confrim.sameAs && errors.push('الرجاء ادخال كلمة مرور متطابقة')
             return errors
         }
     },
@@ -90,24 +108,19 @@ export default {
             }
         },
         sendData() {
-            console.log(this.unique)
             const formData = new FormData()
             formData.append('email', this.email)
             formData.append('password', this.password)
             formData.append('role', 'Specialist')
-            this.axios.post(this.$store.state.url + "/api/emp/login", formData)
+            this.axios.post(this.$store.state.url + "/api/emp/register", formData)
                 .then(res => {
                     this.response = true
                     console.log(res.data)
-                    if (res.data.message == "login success") {
-                        // this.addtoStore(res.data.token, res.data.user.emp_id, res.data.user.name, res.data.user.email, "specialist")
-                        // this.addlocalStorage(res.data.token, res.data.user.emp_id, res.data.user.name, res.data.user.email, "specialist")
-                        this.$router.replace({ name: 'dashboard' })
+                    if (res.data.message == "register success") {
+                        this.true_snackbar = true
                     }
                     else {
-                        this.unique = ''
                         this.snackbar = true
-                        this.$v.$reset()
                     }
                 })
                 .catch(error => {

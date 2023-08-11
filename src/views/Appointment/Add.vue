@@ -19,7 +19,7 @@
                             <v-select outlined v-model="child_id" :reverse="true" :items="child_list" item-text="name"
                                 item-value="id" label="اسم الطفل" :error-messages="childErrors"
                                 @input="$v.child_id.$touch()"></v-select>
-                        
+
 
 
                             <v-text-field outlined :reverse="true" v-model="title" :error-messages="titleErrors"
@@ -59,25 +59,25 @@
                     </div>
                     <div class="col-lg-6">
                         <v-dialog ref="dialog" v-model="modal" :return-value.sync="app_date" persistent width="290px"
-                                color="primary">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ المهمة" readonly
-                                        v-bind="attrs" class="my-date" v-on="on" append-icon="mdi-calendar"
-                                        :error-messages="appDateErrors"></v-text-field>
-                                </template>
-                                <v-date-picker v-model="app_date" scrollable>
-                                    <v-spacer></v-spacer>
-                                    <v-btn text color="primary" @click="modal = false">
-                                        إلغاء
-                                    </v-btn>
-                                    <v-btn text color="primary" @click="$refs.dialog.save(app_date)">
-                                        موافق
-                                    </v-btn>
-                                </v-date-picker>
-                            </v-dialog>
-                            
-                            <v-text-field outlined :reverse="true" v-model="description" :error-messages="desErrors"
-                                label="تفاصيل المهمة"></v-text-field>
+                            color="primary">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-text-field outlined :reverse="true" v-model="app_date" label="تاريخ المهمة" readonly
+                                    v-bind="attrs" class="my-date" v-on="on" append-icon="mdi-calendar"
+                                    :error-messages="appDateErrors"></v-text-field>
+                            </template>
+                            <v-date-picker v-model="app_date" scrollable :allowed-dates="allowedDates">
+                                <v-spacer></v-spacer>
+                                <v-btn text color="primary" @click="modal = false">
+                                    إلغاء
+                                </v-btn>
+                                <v-btn text color="primary" @click="$refs.dialog.save(app_date)">
+                                    موافق
+                                </v-btn>
+                            </v-date-picker>
+                        </v-dialog>
+
+                        <v-text-field outlined :reverse="true" v-model="description" :error-messages="desErrors"
+                            label="تفاصيل المهمة"></v-text-field>
                         <img src="@/assets/img/app2.png" style="width: 90%; position: relative; top: -20px; right: 20px;" />
                     </div>
                 </div>
@@ -173,6 +173,8 @@ export default {
         }
     },
     methods: {
+        allowedDates: val => val >= new Date().toJSON().slice(0,10),
+
 
         submit() {
             this.$v.$touch()
@@ -210,7 +212,6 @@ export default {
             formData.append('description', this.description)
             formData.append('title', this.title)
             formData.append('check', 0)
-            formData.append('notes', "Ededede")
 
             this.axios.post(this.$store.state.url + "/api/Store_Task", formData, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
@@ -232,7 +233,7 @@ export default {
         },
         getUser() {
             const token = localStorage.getItem("token")
-            this.axios.get(this.$store.state.url + "/api/show_Employee",  { headers: { 'Authorization': `Bearer ${token}` } })
+            this.axios.get(this.$store.state.url + "/api/show_Employee", { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.user_list = res.data.data
                     console.log(res.data)

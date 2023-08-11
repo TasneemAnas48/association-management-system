@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <div :class="[isCollapsed ? 'collapsed' : 'not-collapsed']"  v-if="!['login-admin', 'welcome', 'login-specialist', 'login-employee', 'print-child'].includes($route.name)" >
+    <div :class="[isCollapsed ? 'collapsed' : 'not-collapsed']"  v-if="!['login-admin', 'welcome', 'login-specialist', 'register-specialist', 'login-employee', 'print-child'].includes($route.name)" >
       <v-main>
         <sidebar/>
         <navbar/>
