@@ -28,12 +28,13 @@
                             انهاء مهمة
                         </div>
                         <div class="disc">
-                            تم انهاء المهمة  {{ item.title }} بنجاح
+                            تم انهاء المهمة {{ item.title }} بنجاح
                         </div>
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <v-btn @click="finish()">Finish task</v-btn>
-
+                <v-snackbar right top color="green" text v-model="snackbar" timeout="3000">{{ single_new }}
+                </v-snackbar>
                 <!-- <b-nav-item-dropdown right>
                     <template #button-content>
                         <b-icon icon="person-fill"></b-icon>
@@ -53,7 +54,9 @@ export default {
     data: () => ({
         notification: [],
         new_notification: [],
-        messages: 0
+        messages: 0,
+        snackbar: false,
+        single_new: ''
     }),
     // computed: {
     //     isAr() {
@@ -95,6 +98,8 @@ export default {
             var that = this;
             channel.bind('NotificationEvent', function (data) {
                 console.log(data)
+                that.single_new = data.message
+                that.snackbar = true
                 that.new_notification.push(data)
                 that.new_notification = that.new_notification.reverse()
                 that.increase_messsage()

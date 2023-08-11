@@ -11,7 +11,6 @@
             </div>
             <div class="card-body">
                 <div class="row" style="align-items: center;" v-if="load">
-
                     <div class="col-lg-12">
                         <v-simple-table style="padding: 0px;">
                             <template v-slot:default>
@@ -81,7 +80,6 @@
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
-
                         <v-snackbar right bottom color="green" text v-model="snackbar" timeout="5000">
                             تم إرسال اسناد النقاط بنجاح
                             <template v-slot:action="{ attrs }">
@@ -141,10 +139,8 @@ export default {
             !this.$v.points.numeric && errors.push('الرجاء ادخال عدد النقاط رقم')
             return errors
         },
-
     },
     methods: {
-
         submit() {
             this.$v.$touch()
             if (!this.$v.$error) {
@@ -152,7 +148,6 @@ export default {
                 this.sendData()
             }
         },
-
         sendData() {
             const formData = new FormData()
             formData.append('points', this.points)
@@ -181,7 +176,6 @@ export default {
         },
     },
     mounted() {
-        // window.location.reload()
         this.getTaskDetails()
     }
 };
