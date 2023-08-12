@@ -5,7 +5,7 @@
     text-align: justify;
     border: none !important;
 }
-.list .card{
+.card{
     min-height: 450px;
 }
 .card-body {
