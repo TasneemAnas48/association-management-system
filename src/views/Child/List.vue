@@ -60,6 +60,13 @@
                                 <i class="	fas fa-file-archive"></i>
                             </div>
                         </template>
+                        <template v-slot:[`item.test`]="{ item }">
+                            <div @click="test(item)">
+                                <a :href="$store.state.aca_url" target="_blank">
+                                    <i class="fas fa-list"></i>
+                                </a>
+                            </div>
+                        </template>
                     </v-data-table>
                 </div>
                 <div class="progress-container" v-else>
@@ -123,9 +130,9 @@ export default {
             { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
             // { text: 'الحالة', value: 'infection', align: "center" },
             { text: 'دراسة حالة', value: 'study_status', align: "center" },
-            // { text: 'القسم', value: 'section', align: "center" },
-            { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
+            { text: 'اجراء اختبار', value: 'test', sortable: false, align: "center" },
             { text: 'تقرير', value: 'report', sortable: false, align: "center" },
+            { text: 'ادارة', value: 'actions', sortable: false, align: "center" },
 
         ],
         search: '',
@@ -185,6 +192,9 @@ export default {
             this.data.splice(this.editedIndex, 1)
             this.sendIdDeleted()
             this.closeDelete()
+        },
+        test(){
+
         },
         closeDelete() {
             this.dialogDelete = false

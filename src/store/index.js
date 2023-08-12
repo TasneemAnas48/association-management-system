@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     isCollapsed: false,
     url: "http://192.168.43.244:8000",
+    aca_url: "http://192.168.43.244:8082/side-view",
     id: '',
     name: '',
     email:'',

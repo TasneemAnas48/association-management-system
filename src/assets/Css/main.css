@@ -107,6 +107,21 @@
     background-color: #e220d2;
     cursor: pointer;
 }
+.my-table .fa-list{
+    color: #0a2879;
+    background: #0a3e793a;
+    border-radius: 7px;
+    padding: 7px 9px;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.my-table .fa-list:hover{
+    color: white;
+    background-color: #0a2879;
+    cursor: pointer;
+}
+
 .my-table .v-data-footer{
     direction: ltr;
 }
