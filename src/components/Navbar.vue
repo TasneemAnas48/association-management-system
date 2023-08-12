@@ -122,7 +122,7 @@ export default {
                 .then(res => {
                     this.notification = res.data.data
                     // this.notification = this.notification.reverse()
-                    console.log(res.data.data)
+                    // console.log(res.data.data)
                 })
         },
         display_task(id) {
