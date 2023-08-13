@@ -5,7 +5,10 @@
     text-align: justify;
     border: none !important;
 }
-.card{
+.add .card{
+    min-height: 450px;
+}
+.list .card{
     min-height: 450px;
 }
 .card-body {

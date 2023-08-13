@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </template>
-                    
+
                         <template v-slot:[`item.study_status`]="{ item }">
                             <div @click="study_status(item)">
                                 <i class="fas fa-edit"></i>
@@ -62,9 +62,7 @@
                         </template>
                         <template v-slot:[`item.test`]="{ item }">
                             <div @click="test(item)">
-                                <a :href="$store.state.aca_url" target="_blank">
-                                    <i class="fas fa-list"></i>
-                                </a>
+                                <i class="fas fa-list"></i>
                             </div>
                         </template>
                     </v-data-table>
@@ -124,10 +122,10 @@ export default {
     },
     data: () => ({
         headers: [
-            { text: 'id', value: 'id', align: "center" },
+            // { text: 'id', value: 'id', align: "center" },
             { text: 'الاسم', value: 'name', align: "center" },
             { text: 'العمر', value: 'age', align: "center" },
-            { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
+            // { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
             // { text: 'الحالة', value: 'infection', align: "center" },
             { text: 'دراسة حالة', value: 'study_status', align: "center" },
             { text: 'اجراء اختبار', value: 'test', sortable: false, align: "center" },
@@ -169,7 +167,7 @@ export default {
         getData() {
             this.axios.get(this.$store.state.url + "/api/child")
                 .then(res => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     this.load = true
                     this.data = res.data
                     console.log(this.data)
@@ -179,11 +177,11 @@ export default {
             this.$router.replace({ name: 'display-child', params: { id: item.id } })
         },
         editItem(item) {
-            console.log("Edit: " + item.id)
+            // console.log("Edit: " + item.id)
             this.$router.replace({ name: 'edit-child', params: { id: item.id } })
         },
         deleteItem(item) {
-            console.log("Delete: " + item.id)
+            // console.log("Delete: " + item.id)
             this.editedIndex = this.data.indexOf(item)
             this.delete = item
             this.dialogDelete = true
@@ -193,8 +191,31 @@ export default {
             this.sendIdDeleted()
             this.closeDelete()
         },
-        test(){
+        test(item) {
+            console.log(item)
+            const user_name = localStorage.getItem("name")            
+            const email = localStorage.getItem("email")
 
+            const formData = new FormData()
+            formData.append('father_name', item.father_name)
+            formData.append('child_name', item.name)
+            formData.append('age', item.birth_date)
+            formData.append('user_name', user_name)
+            formData.append('email', email)
+
+            // console.log(user_name)
+            // console.log(email)
+            // window.location.replace('...');
+            this.axios.post(this.$store.state.aca_url + "/api/connect/between/sys1", formData)
+                .then(res => {
+                    console.log(res.data)
+                    if (res.data.message == "false")
+                        window.location.replace(this.$store.state.aca_url_front+"/first-register");
+                    if (res.data.message == "true")
+                        window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id);
+                }).catch(error => {
+                    this.error_snackbar = true
+                })
         },
         closeDelete() {
             this.dialogDelete = false
@@ -202,8 +223,8 @@ export default {
         sendIdDeleted() {
             this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.id)
                 .then((res) => {
-                    console.log(res)
-                    console.log(this.delete.id)
+                    // console.log(res)
+                    // console.log(this.delete.id)
                     if (res.status == 200)
                         this.snackbar_delete = true
                     else

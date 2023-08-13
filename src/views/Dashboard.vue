@@ -24,7 +24,7 @@
                     <div class="card mini-card">
                         <div class="card-body">
                             <div class="row row-header">
-                                <h5 class="color"> الاخصائيين </h5>
+                                <h5 class="color">الاخصائيين </h5>
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
@@ -266,15 +266,23 @@ export default {
             this.axios.get(this.$store.state.url + "/api/All_Diseases/" + this.start_diseases + "," + this.end_diseases)
                 .then(res => {
                     this.diseases = res.data
-                    console.log(this.diseases)
+                    // console.log(this.diseases)
                     this.series_diseases = [this.diseases[1][0], this.diseases[2][0]]
                     this.dialogDiseases = false
+                });
+        },
+        getNumbers(){
+            this.axios.get(this.$store.state.url + "/api/report/numbers")
+                .then(res => {
+                    this.diseases = res.data
+                    console.log(res.data)
                 });
         }
     },
     mounted() {
         this.getInfection()
         this.getDiseases()
+        // this.getNumbers()
     }
 };
 </script>

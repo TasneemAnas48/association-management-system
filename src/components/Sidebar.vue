@@ -33,7 +33,7 @@ export default {
   data: () => ({
     adm_menu: [
       {
-        href: "/",
+        href: "/dashboard",
         title: "لوحة التحكم",
         icon: "fa fa-home"
       },
@@ -121,7 +121,7 @@ export default {
     ],
     spe_menu: [
       {
-        href: "/",
+        href: "/dashboard",
         title: "لوحة التحكم",
         icon: "fa fa-home"
       },
