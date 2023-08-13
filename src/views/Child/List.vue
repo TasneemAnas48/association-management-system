@@ -122,7 +122,7 @@ export default {
     },
     data: () => ({
         headers: [
-            // { text: 'id', value: 'id', align: "center" },
+            { text: 'id', value: 'id', align: "center" },
             { text: 'الاسم', value: 'name', align: "center" },
             { text: 'العمر', value: 'age', align: "center" },
             // { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
