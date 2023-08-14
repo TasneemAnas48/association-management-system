@@ -227,7 +227,7 @@ export default {
                     console.log(res.data)
                     if (res.data.message == "false")
                         {
-                            this.register()
+                            this.register(item)
                         }
                     if (res.data.message == "true")
                         window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id + "/" + res.data.data.user_id);
@@ -235,18 +235,21 @@ export default {
                     this.error_snackbar = true
                 })
         },
-        register(){
+        register(item){
             const user_name = localStorage.getItem("name")            
             const email = localStorage.getItem("email")
 
             this.axios.post(this.$store.state.aca_url + "/api/login_data", {
                 "name": user_name,
-                "email": email
+                "email": email,
+                "child_name": item.name,
+                "father_name": item.father_name,
+                "date": item.birth_date
             })
                 .then(res => {
                     console.log(res)
                     this.user_id = res.data.user.id
-                    window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id + "/" + this.user_id);
+                    window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.child.id + "/" + this.user_id);
 
                 })
         },
