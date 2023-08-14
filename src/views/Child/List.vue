@@ -122,7 +122,7 @@ export default {
     },
     data: () => ({
         headers: [
-            { text: 'id', value: 'id', align: "center" },
+            { text: 'id', value: 'child_id', align: "center" },
             { text: 'الاسم', value: 'name', align: "center" },
             { text: 'العمر', value: 'age', align: "center" },
             // { text: 'رقم الهاتف', value: 'phone_num', align: "center" },
@@ -174,11 +174,11 @@ export default {
                 });
         },
         displayItem(item) {
-            this.$router.replace({ name: 'display-child', params: { id: item.id } })
+            this.$router.replace({ name: 'display-child', params: { id: item.child_id } })
         },
         editItem(item) {
             // console.log("Edit: " + item.id)
-            this.$router.replace({ name: 'edit-child', params: { id: item.id } })
+            this.$router.replace({ name: 'edit-child', params: { id: item.child_id } })
         },
         deleteItem(item) {
             // console.log("Delete: " + item.id)
@@ -221,7 +221,7 @@ export default {
             this.dialogDelete = false
         },
         sendIdDeleted() {
-            this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.id)
+            this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.child_id)
                 .then((res) => {
                     // console.log(res)
                     // console.log(this.delete.id)
@@ -232,11 +232,11 @@ export default {
                 })
         },
         study_status(item) {
-            this.$router.replace({ name: 'child-study', params: { id: item.id } })
+            this.$router.replace({ name: 'child-study', params: { id: item.child_id } })
         },
         report(item) {
             this.DialogReport = true
-            this.child_id = item.id
+            this.child_id = item.child_id
         },
         confrim_report() {
             // console.log(this.recomm)

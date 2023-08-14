@@ -11,7 +11,7 @@
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
-                                    <h4 class="color">630</h4>
+                                    <h4 class="color">{{ numbers.child_numbers }}</h4>
                                 </div>
                                 <div class="col-lg-4">
                                     <i class='fas fa-baby'></i>
@@ -28,7 +28,7 @@
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
-                                    <h4 class="color">23</h4>
+                                    <h4 class="color">{{ numbers.specific_numbers }}</h4>
                                 </div>
                                 <div class="col-lg-4">
                                     <i class='fas fa-user-md'></i>
@@ -45,7 +45,7 @@
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
-                                    <h4 class="color">32</h4>
+                                    <h4 class="color">{{ numbers.emp_numbers  }}</h4>
                                 </div>
                                 <div class="col-lg-4">
                                     <i class='fas fa-user-tie'></i>
@@ -62,7 +62,7 @@
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
-                                    <h4 class="color">52</h4>
+                                    <h4 class="color">{{ numbers.task_numbers }}</h4>
                                 </div>
                                 <div class="col-lg-4">
                                     <i class='fa fa-table-list'></i>
@@ -235,7 +235,7 @@ export default {
             tooltip: {
                 y: {
                     formatter: function (val) {
-                        return val + "  طفل" 
+                        return val + "  طفل"
                     }
                 }
             }
@@ -244,6 +244,7 @@ export default {
         dialogDiseases: false,
         start_diseases: '',
         end_diseases: '',
+        numbers: {child_numbers: "", emp_numbers: "", specific_numbers: "", task_numbers:""}
     }),
     methods: {
         getInfection() {
@@ -271,18 +272,18 @@ export default {
                     this.dialogDiseases = false
                 });
         },
-        getNumbers(){
+        getNumbers() {
             this.axios.get(this.$store.state.url + "/api/report/numbers")
                 .then(res => {
-                    this.diseases = res.data
-                    console.log(res.data)
+                    this.numbers = res.data.data
+                    console.log(res.data.data)
                 });
         }
     },
     mounted() {
         this.getInfection()
         this.getDiseases()
-        // this.getNumbers()
+        this.getNumbers()
     }
 };
 </script>
