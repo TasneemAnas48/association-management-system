@@ -14,17 +14,13 @@
                 <div class="row">
                     <div class="col-lg-6">
 
-
                         <v-form>
                             <v-select outlined v-model="child_id" :reverse="true" :items="child_list" item-text="name"
                                 item-value="id" label="اسم الطفل" :error-messages="childErrors"
                                 @input="$v.child_id.$touch()"></v-select>
 
-
-
                             <v-text-field outlined :reverse="true" v-model="title" :error-messages="titleErrors"
                                 label=" عنوان المهمة"></v-text-field>
-
 
                             <v-dialog ref="dialog" v-model="modal" :return-value.sync="app_date" persistent width="290px"
                                 color="primary">
@@ -82,8 +78,6 @@
                         <v-select outlined v-model="user_id" :reverse="true" :items="user_list" item-text="name"
                             item-value="emp_id" label="اسناد المهمة لـ" :error-messages="userErrors"
                             @input="$v.user_id.$touch()"></v-select>
-
-
 
                         <v-text-field outlined :reverse="true" v-model="description" :error-messages="desErrors"
                             label="تفاصيل المهمة"></v-text-field>

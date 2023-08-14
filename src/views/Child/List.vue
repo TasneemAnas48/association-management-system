@@ -156,7 +156,8 @@ export default {
         DialogReport: false,
         recomm: null,
         summary: null,
-        child_id: null
+        child_id: null,
+        user_id: ''
     }),
     watch: {
         dialogDelete(val) {
@@ -191,6 +192,21 @@ export default {
             this.sendIdDeleted()
             this.closeDelete()
         },
+        
+        closeDelete() {
+            this.dialogDelete = false
+        },
+        sendIdDeleted() {
+            this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.child_id)
+                .then((res) => {
+                    // console.log(res)
+                    // console.log(this.delete.id)
+                    if (res.status == 200)
+                        this.snackbar_delete = true
+                    else
+                        this.error_snackbar_delete = true
+                })
+        },
         test(item) {
             console.log(item)
             const user_name = localStorage.getItem("name")            
@@ -210,25 +226,28 @@ export default {
                 .then(res => {
                     console.log(res.data)
                     if (res.data.message == "false")
-                        window.location.replace(this.$store.state.aca_url_front+"/first-register");
+                        {
+                            this.register()
+                        }
                     if (res.data.message == "true")
-                        window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id);
+                        window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id + "/" + res.data.data.user_id);
                 }).catch(error => {
                     this.error_snackbar = true
                 })
         },
-        closeDelete() {
-            this.dialogDelete = false
-        },
-        sendIdDeleted() {
-            this.axios.delete(this.$store.state.url + "/api/child/" + this.delete.child_id)
-                .then((res) => {
-                    // console.log(res)
-                    // console.log(this.delete.id)
-                    if (res.status == 200)
-                        this.snackbar_delete = true
-                    else
-                        this.error_snackbar_delete = true
+        register(){
+            const user_name = localStorage.getItem("name")            
+            const email = localStorage.getItem("email")
+
+            this.axios.post(this.$store.state.aca_url + "/api/login_data", {
+                "name": user_name,
+                "email": email
+            })
+                .then(res => {
+                    console.log(res)
+                    this.user_id = res.data.user.id
+                    window.location.replace(this.$store.state.aca_url_front+"/side-view-ass/"+ res.data.data.id + "/" + this.user_id);
+
                 })
         },
         study_status(item) {
