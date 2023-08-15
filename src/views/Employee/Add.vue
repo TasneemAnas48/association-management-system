@@ -19,7 +19,7 @@
                             <v-text-field outlined :reverse="true" v-model="email" :error-messages="emailErrors"
                                 label="البريد الالكتروني "></v-text-field>
                             <v-select outlined v-model="level" :reverse="true" :items="level_list" label="المستوى العلمي"
-                                :error-messages="levelErrors"></v-select>
+                                :error-messages="levelErrors" item-text="name" item-value="name"></v-select>
                             <v-btn @click="submit" :disabled="isSubmit && !response" color="primary" light
                                 style="margin-top: 15px">
                                 إضافة
@@ -83,7 +83,7 @@ export default {
         name: '',
         email: '',
         level: '',
-        level_list: ['تعليم اساسي', 'تعليم ثانوي', 'جامعة', 'معهد']
+        level_list: []
     }),
     validations: {
         name: { required },
@@ -138,8 +138,18 @@ export default {
                     this.error_snackbar = true
                 })
         },
+        getLevel(){
+            const token = localStorage.getItem("token")
+            this.axios.get(this.$store.state.url + "/api/ShowLevel", { headers: { 'Authorization': `Bearer ${token}` } })
+                .then(res => {
+                    this.load = true
+                    this.level_list = res.data
+                    // console.log(res.data)
+                });
+        }
     },
     mounted() {
+        this.getLevel()
     }
 };
 </script>

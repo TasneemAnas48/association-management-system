@@ -73,7 +73,6 @@
                 </div>
             </div>
         </div>
-        <!-- Infection Chart -->
         <div class="container">
             <div class="body row" style="margin-top: 10px;row-gap: 15px;">
                 <div class="col-lg-7">
@@ -157,6 +156,49 @@
                     </div>
                 </div>
             </div>
+            <div class="body row" style="margin-top: 10px;row-gap: 15px;">
+                <div class="col-lg-6">
+                    <div class="card mini-card" id="chart">
+                        <div class="card-header" style="padding: 10px 40px !important;">
+                            <div class="d-flex justify-content-between align-items-center add">
+                                احصائيات الموظفين
+                                <v-btn @click="dialogEmp = true" color="primary" outlined style="margin: 15px 0px">
+                                    السنة
+                                </v-btn>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <apexchart ref="chart_emp" type="area" height="293" :options="chartOptions_emp"
+                                :series="series_emp">
+                            </apexchart>
+                        </div>
+                        <v-dialog v-model="dialogEmp" max-width="600px">
+                            <v-card>
+                                <v-spacer></v-spacer>
+                                <v-card-title class="justify-content-start"
+                                    style="border-bottom: 1px solid #aeaeae;padding-top: 30px;font-weight: bold;margin-bottom: 40px;">
+                                    احصائيات الموظفين في سنة
+                                </v-card-title>
+                                <div style="margin: 0px 30px">
+                                    <v-form>
+                                        <v-select outlined v-model="start_emp" :reverse="true" :items="years_list"
+                                            label="بدءا من سنة"></v-select>
+                                        <v-select outlined v-model="end_emp" :reverse="true" :items="years_list"
+                                            label="الى سنة"></v-select>
+                                    </v-form>
+                                </div>
+                                <v-divider></v-divider>
+                                <v-card-actions style="justify-content: end; padding-bottom: 30px;margin-left: 20px;">
+                                    <v-btn @click="getEmployee" color="primary" light>
+                                        اختيار
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -244,7 +286,41 @@ export default {
         dialogDiseases: false,
         start_diseases: '',
         end_diseases: '',
-        numbers: {child_numbers: "", emp_numbers: "", specific_numbers: "", task_numbers:""}
+        numbers: {child_numbers: "", emp_numbers: "", specific_numbers: "", task_numbers:""},
+
+
+        series_emp: [{
+            name: "عدد الموظفين",
+            data: []
+        }],
+        chartOptions_emp: {
+            chart: {
+                type: "area",
+                zoom: {
+                    enabled: false,
+                },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: "smooth",
+            },
+            colors: ['#ee1d32', '#ee1d32'],
+            xaxis: {
+                categories: [
+                    'معهد',
+                    'جامعي',
+                    'ثانوي',
+                    'اعدادي',
+                ],
+            },
+        },
+        emp: null,
+        dialogEmp: false,
+        start_emp: '',
+        end_emp: '',
+
     }),
     methods: {
         getInfection() {
@@ -278,12 +354,28 @@ export default {
                     this.numbers = res.data.data
                     console.log(res.data.data)
                 });
+        },
+        getEmployee(){
+            if (this.start_emp == '')
+                this.start_emp = '2023'
+            this.axios.get(this.$store.state.url + "/api/All_level/" + this.start_emp + "," + this.end_emp)
+                .then(res => {
+                    this.emp = res.data
+                    console.log(this.emp)
+                    const arr = [this.emp[1][0], this.emp[2][0], this.emp[3][0], this.emp[4][0]]
+                    console.log(arr)
+                    this.$refs.chart_emp.updateSeries([{
+                        data: arr
+                    }]);
+                    this.dialogEmp = false
+                });
         }
     },
     mounted() {
         this.getInfection()
         this.getDiseases()
         this.getNumbers()
+        this.getEmployee()
     }
 };
 </script>

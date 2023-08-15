@@ -33,7 +33,7 @@
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <v-btn @click="finish()">Finish task</v-btn>
-                <v-snackbar right top color="green" text v-model="snackbar" timeout="3000">{{ single_new }}
+                <v-snackbar right top color="green" text v-model="snackbar" timeout="4000">{{ single_new }}
                 </v-snackbar>
                 <!-- <b-nav-item-dropdown right>
                     <template #button-content>
@@ -94,7 +94,7 @@ export default {
                 });
         },
         getPusher() {
-            var channel = this.$pusher.subscribe("public-channel.1")
+            var channel = this.$pusher.subscribe("public-channel.1.5")
             var that = this;
             channel.bind('NotificationEvent', function (data) {
                 console.log(data)
