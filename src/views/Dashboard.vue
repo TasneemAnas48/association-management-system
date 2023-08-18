@@ -45,7 +45,7 @@
                             </div>
                             <div class="row" style="align-items: end;margin-top: 0px">
                                 <div class="col-lg-8">
-                                    <h4 class="color">{{ numbers.emp_numbers  }}</h4>
+                                    <h4 class="color">{{ numbers.emp_numbers }}</h4>
                                 </div>
                                 <div class="col-lg-4">
                                     <i class='fas fa-user-tie'></i>
@@ -197,8 +197,36 @@
                         </v-dialog>
                     </div>
                 </div>
+                <div class="col-lg-6">
+                    <v-simple-table v-for="(task, index) in top_emp" :key="index"
+                        style="margin: 10px 30px 30px; padding: 0px;">
+                        <template v-slot:default>
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        الاسم
+                                    </th>
+                                    <th class="text-center">
+                                        المستوى العلمي
+                                    </th>
+                                    <th class="text-center">
+                                        عدد المهمات
+                                    </th>
+                                    <th class="text-center">
+                                        النقاط
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in top_emp" :key="item.name">
+                                    <td>{{ item.name }}</td>
+                                    <!-- <td>{{ item.calories }}</td> -->
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -286,7 +314,7 @@ export default {
         dialogDiseases: false,
         start_diseases: '',
         end_diseases: '',
-        numbers: {child_numbers: "", emp_numbers: "", specific_numbers: "", task_numbers:""},
+        numbers: { child_numbers: "", emp_numbers: "", specific_numbers: "", task_numbers: "" },
 
 
         series_emp: [{
@@ -320,6 +348,7 @@ export default {
         dialogEmp: false,
         start_emp: '',
         end_emp: '',
+        top_emp: []
 
     }),
     methods: {
@@ -355,7 +384,7 @@ export default {
                     console.log(res.data.data)
                 });
         },
-        getEmployee(){
+        getEmployee() {
             if (this.start_emp == '')
                 this.start_emp = '2023'
             this.axios.get(this.$store.state.url + "/api/All_level/" + this.start_emp + "," + this.end_emp)
@@ -368,6 +397,13 @@ export default {
                         data: arr
                     }]);
                     this.dialogEmp = false
+                });
+        },
+        getTopEmployee() {
+            this.axios.get(this.$store.state.url + "/api/report/numbers")
+                .then(res => {
+                    this.top_emp = res.data.data
+                    console.log(res.data.data)
                 });
         }
     },

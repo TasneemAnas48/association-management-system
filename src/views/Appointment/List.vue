@@ -112,6 +112,7 @@ export default {
     data: () => ({
         headers: [
             { text: 'رقم المهمة', value: 'id', align: "center" },
+            { text: 'عنوان المهمة', value: 'title', align: "center" },
             { text: 'اسم الطفل', value: 'child_name', align: "center" },
             { text: 'تاريخ المهمة', value: 'app_date', align: "center" },
             { text: 'اسم الموظف', value: 'user_name', align: "center" },

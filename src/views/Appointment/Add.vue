@@ -72,6 +72,14 @@
                                     </v-btn>
                                 </template>
                             </v-snackbar>
+                            <v-snackbar right bottom color="red" text v-model="busy_snackbar" timeout="5000">
+                                هذا الموظف مشفول في هذا التوقيت، الرجاء اختيار موعد ثاني
+                                <template v-slot:action="{ attrs }">
+                                    <v-btn color="red" text v-bind="attrs" @click="busy_snackbar = false">
+                                        اغلاق
+                                    </v-btn>
+                                </template>
+                            </v-snackbar>
                         </v-form>
                     </div>
                     <div class="col-lg-6">
@@ -121,6 +129,7 @@ export default {
         snackbar: false,
         error_snackbar: false,
         error_snackbar2: false,
+        busy_snackbar: false,
         bread_add: [
             {
                 text: 'المهمات',
@@ -215,49 +224,32 @@ export default {
             this.$v.$touch()
             if (!this.$v.$error && !this.error_snackbar2) {
                 this.isSubmit = true
-                this.sendData_1()
+                this.sendData()
             }
         },
-
-        sendData_1() {
-            console.log(this.child_id)
-            console.log(this.app_date)
-            const token = localStorage.getItem("token")
-            const formData = new FormData()
-            formData.append('child_id', this.child_id)
-            formData.append('app_date', this.app_date)
-            this.axios.post(this.$store.state.url + "/api/Store_Appointment", formData, { headers: { 'Authorization': `Bearer ${token}` } })
-                .then(res => {
-                    this.response = true
-                    console.log(res.data)
-                    this.app_id = res.data.Appointment.id
-                    if (res.data.message == 'An Appointment has been booked successfully') {
-                        this.sendData_2()
-                    }
-                    else
-                        this.error_snackbar = true
-                }).catch(error => {
-                    this.error_snackbar = true
-                })
-        },
-        sendData_2() {
+        sendData() {
             const token = localStorage.getItem("token")
             const formData = new FormData()
             formData.append('user_id', this.user_id)
-            formData.append('app_id', this.app_id)
+            formData.append('app_date', this.app_date)
             formData.append('hours', this.hours)
             formData.append('description', this.description)
             formData.append('title', this.title)
             formData.append('start', this.time)
-
+            formData.append('child_id', this.child_id)
             formData.append('check', 0)
-
+            console.log(this.child_id)
             this.axios.post(this.$store.state.url + "/api/Store_Task", formData, { headers: { 'Authorization': `Bearer ${token}` } })
                 .then(res => {
                     this.response = true
                     console.log(res.data)
                     if (res.data.message == 'A Task has been booked successfully') {
                         this.$router.replace({ name: 'appointment-list' })
+                    }
+                    else if(res.data.message == 'This user is busy in this time'){
+                        this.busy_snackbar = true
+                        this.isSubmit = false
+                        this.response = false
                     }
                     else
                         this.error_snackbar = true
