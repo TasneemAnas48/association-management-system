@@ -32,7 +32,7 @@
                         </div>
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
-                <v-btn @click="finish()">Finish task</v-btn>
+                <!-- <v-btn @click="finish()">Finish task</v-btn> -->
                 <v-snackbar right top color="green" text v-model="snackbar" timeout="4000">{{ single_new }}
                 </v-snackbar>
                 <!-- <b-nav-item-dropdown right>

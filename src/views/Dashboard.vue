@@ -198,10 +198,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <v-simple-table v-for="(task, index) in top_emp" :key="index"
-                        style="margin: 10px 30px 30px; padding: 0px;">
+                    <v-simple-table style="margin: 0px; padding: 0px">
                         <template v-slot:default>
-                            <thead>
+                            <thead style="height: 87px;">
                                 <tr>
                                     <th class="text-center">
                                         الاسم
@@ -218,9 +217,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="item in top_emp" :key="item.name">
-                                    <td>{{ item.name }}</td>
-                                    <!-- <td>{{ item.calories }}</td> -->
+                                <tr v-for="item in top_emp" :key="item.name" style="height: 72px;">
+                                    <td class="text-center">{{ item.name }}</td>
+                                    <td class="text-center">{{ item.scientific_level }}</td>
+                                    <td class="text-center">{{ item.Count }}</td>
+                                    <td class="text-center">{{ item.points }}</td>
                                 </tr>
                             </tbody>
                         </template>
@@ -381,7 +382,7 @@ export default {
             this.axios.get(this.$store.state.url + "/api/report/numbers")
                 .then(res => {
                     this.numbers = res.data.data
-                    console.log(res.data.data)
+                    // console.log(res.data.data)
                 });
         },
         getEmployee() {
@@ -390,9 +391,9 @@ export default {
             this.axios.get(this.$store.state.url + "/api/All_level/" + this.start_emp + "," + this.end_emp)
                 .then(res => {
                     this.emp = res.data
-                    console.log(this.emp)
+                    // console.log(this.emp)
                     const arr = [this.emp[1][0], this.emp[2][0], this.emp[3][0], this.emp[4][0]]
-                    console.log(arr)
+                    // console.log(arr)
                     this.$refs.chart_emp.updateSeries([{
                         data: arr
                     }]);
@@ -400,10 +401,10 @@ export default {
                 });
         },
         getTopEmployee() {
-            this.axios.get(this.$store.state.url + "/api/report/numbers")
+            this.axios.get(this.$store.state.url + "/api/OrderBouns")
                 .then(res => {
-                    this.top_emp = res.data.data
-                    console.log(res.data.data)
+                    this.top_emp = res.data.Task
+                    console.log(res.data.Task)
                 });
         }
     },
@@ -412,6 +413,7 @@ export default {
         this.getDiseases()
         this.getNumbers()
         this.getEmployee()
+        this.getTopEmployee()
     }
 };
 </script>
