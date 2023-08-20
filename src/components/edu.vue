@@ -1,11 +1,11 @@
 <template>
     <div id="med" class="med add">
         <v-form v-if="load">
-            <div class="box" v-for="(box, index) in boxes" :key="index">
+            <div class="box" v-for="(box, index) in boxes" :key="index" v-if="index != 3">
                 <h6 class="box-title" v-if="box.title != 'no title'">
                     {{ box.title }}
                 </h6>
-                <div v-if="box.title != 'التأهيل التربوي للطفل'">
+                <div v-if="(box.title != 'التأهيل التربوي للطفل')">
                     <div v-for="(item, i) in box.list" :key="i">
                         <v-text-field outlined :reverse="true" v-if="item.type == 0" v-model="answer[item.id - 1].answer"
                             :label="item.question"></v-text-field>
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else-if="box.title == 'التأهيل التربوي للطفل'">
                     <edu-table @table="center_info = $event" />
                 </div>
             </div>

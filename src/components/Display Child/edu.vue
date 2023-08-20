@@ -7,7 +7,8 @@
                         <div class="box-title">
                             {{ box.title }}
                         </div>
-                        <v-simple-table style="padding: 0px; border: none;margin: 0px; top: -20px; position: relative;">
+                        <v-simple-table v-if="index != 6"
+                            style="padding: 0px; border: none;margin: 0px; top: -20px; position: relative;">
                             <template v-slot:default>
                                 <tbody>
                                     <tr v-for="(item, index) in box.question" :key="index">
@@ -17,18 +18,44 @@
                                 </tbody>
                             </template>
                         </v-simple-table>
-                    </div>
-                    <div v-else>
-                        <v-simple-table style="padding: 0px; border: none;margin: 0px; position: relative;">
-                            <template v-slot:default>
-                                <tbody>
-                                    <tr v-for="(item, index) in box.question" :key="index">
-                                        <td class="my-title">{{ item.question }}</td>
-                                        <td>{{ item.answer }}</td>
-                                    </tr>
-                                </tbody>
-                            </template>
-                        </v-simple-table>
+                        <div v-else>
+                            <v-simple-table style="padding: 0px; border: none;margin: 0px; position: relative;">
+                                <template v-slot:default>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                اسم المركز
+                                            </th>
+                                            <th class="text-center">
+                                                التشخيص
+                                            </th>
+                                            <th class="text-center">
+                                                الاخصائي
+                                            </th>
+                                            <th class="text-center">
+                                                التأهيل
+                                            </th>
+                                            <th class="text-center">
+                                                محاور التأهيل
+                                            </th>
+                                            <th class="text-center">
+                                                المدة الزمنية
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, index) in box.question" :key="index">
+                                            <td class="text-center">{{ item.center_name }}</td>
+                                            <td class="text-center">{{ item.diagnosis }}</td>
+                                            <td class="text-center">{{ item.specialist }}</td>
+                                            <td class="text-center">{{ item.qualification }}</td>
+                                            <td class="text-center">{{ item.qualification_axes }}</td>
+                                            <td class="text-center">{{ item.time }}</td>
+                                        </tr>
+                                    </tbody>
+                                </template>
+                            </v-simple-table>
+                        </div>
                     </div>
                 </div>
             </div>
